@@ -1,0 +1,924 @@
+<title>NoughtVault — Enclosure 001 · The Weight</title>
+
+<style>
+  :root{
+    /* Committed single-theme design: the brand is void-black, in both documents. */
+    --void:#000000;
+    --panel:#070707;
+    --panel-2:#0C0C0C;
+    --rule:#1B1B1B;
+    --rule-hi:#2C2C2C;
+    --titanium:#8A8C8E;
+    --white:#FFFFFF;
+    --prose:#C4BDB2;
+
+    /* Accent moves from Enclosure 000's walnut to chengal — hotter, more golden. */
+    --chengal:#7A5320;
+    --chengal-hi:#C6903F;
+    --chengal-dk:#2A1B08;
+    --ballast:#5A6066;
+    --steel:#9AA3A8;
+
+    /* Semantic, kept separate from the accent. */
+    --hold:#6FBF8E;
+    --fail:#FF5B5B;
+    --warn:#D9A441;
+
+    --mono: ui-monospace,"Cascadia Mono",Consolas,"SFMono-Regular",Menlo,"DejaVu Sans Mono",monospace;
+    --serif: "Iowan Old Style","Palatino Linotype",Palatino,"Book Antiqua",Georgia,serif;
+    --col: 68ch;
+    --wide: 1000px;
+  }
+
+  html{ background:var(--void); color-scheme:dark; }
+  body{
+    background:var(--void); color:var(--prose);
+    font-family:var(--serif); font-size:17px; line-height:1.72;
+    -webkit-font-smoothing:antialiased;
+  }
+  .page{ max-width:var(--wide); margin:0 auto; padding:0 24px 120px; }
+  .page::before{
+    content:""; position:fixed; inset:0; pointer-events:none; z-index:0;
+    background:repeating-linear-gradient(0deg,rgba(255,255,255,.022) 0 1px,transparent 1px 3px);
+  }
+  .page > *{ position:relative; z-index:1; }
+
+  /* ---------- typographic chrome ---------- */
+  .eyebrow{
+    font-family:var(--mono); font-size:11px; letter-spacing:.42em;
+    text-transform:uppercase; color:var(--titanium);
+  }
+  .eyebrow b{ color:var(--white); font-weight:400; }
+
+  h1{
+    font-family:var(--mono); font-weight:400;
+    font-size:clamp(28px,4.6vw,44px); line-height:1.12; letter-spacing:.02em;
+    color:var(--white); text-wrap:balance; margin:18px 0 0;
+  }
+  h2{
+    font-family:var(--mono); font-weight:400; font-size:15px;
+    letter-spacing:.24em; text-transform:uppercase; color:var(--white);
+    margin:0; text-wrap:balance;
+  }
+  h3{
+    font-family:var(--mono); font-weight:400; font-size:12.5px;
+    letter-spacing:.2em; text-transform:uppercase; color:var(--titanium);
+    margin:0;
+  }
+  p{ margin:0; max-width:var(--col); }
+  strong{ color:var(--white); font-weight:600; }
+  em{ color:var(--chengal-hi); font-style:italic; }
+  a{ color:var(--chengal-hi); }
+  a:focus-visible{ outline:2px solid var(--chengal-hi); outline-offset:3px; }
+
+  header.masthead{
+    border-bottom:1px solid var(--rule);
+    padding:64px 0 30px;
+    display:flex; flex-direction:column; gap:14px;
+  }
+  .deck{ max-width:62ch; color:var(--titanium); font-size:18px; }
+  .stamp{
+    display:inline-flex; align-items:center; gap:10px;
+    font-family:var(--mono); font-size:10.5px; letter-spacing:.28em;
+    text-transform:uppercase; color:var(--fail);
+    border:1px solid rgba(255,91,91,.35); padding:6px 12px; align-self:flex-start;
+  }
+  .stamp::before{ content:""; width:6px; height:6px; background:var(--fail); }
+
+  section{
+    padding:52px 0; border-bottom:1px solid var(--rule);
+    display:flex; flex-direction:column; gap:22px;
+  }
+  .sec-head{ display:flex; flex-direction:column; gap:8px; }
+  .prose-stack{ display:flex; flex-direction:column; gap:18px; }
+
+  /* ---------- panels, tables, callouts ---------- */
+  .panel{
+    border:1px solid var(--rule-hi); background:var(--panel);
+    padding:22px 24px; display:flex; flex-direction:column; gap:14px;
+  }
+  .panel p{ font-size:16px; }
+  .callout{ border-left:2px solid var(--chengal-hi); background:var(--panel); padding:18px 22px; }
+  .callout.warn{ border-left-color:var(--fail); }
+  .callout p{ max-width:62ch; }
+
+  .scroll{ overflow-x:auto; border:1px solid var(--rule-hi); background:var(--panel); }
+  table{ border-collapse:collapse; width:100%; min-width:620px; font-family:var(--mono); font-size:12.5px; }
+  caption{
+    caption-side:top; text-align:left; font-family:var(--mono); font-size:10.5px;
+    letter-spacing:.28em; text-transform:uppercase; color:var(--titanium);
+    padding:16px 20px 10px;
+  }
+  th,td{ text-align:left; padding:11px 20px; border-top:1px solid var(--rule); vertical-align:top; }
+  th{ color:var(--titanium); font-weight:400; letter-spacing:.14em; text-transform:uppercase; font-size:10.5px; }
+  td{ color:var(--prose); }
+  td.k{ color:var(--white); white-space:nowrap; }
+  td.n{ font-variant-numeric:tabular-nums; text-align:right; white-space:nowrap; }
+  th.n{ text-align:right; }
+  tbody tr:hover td{ background:var(--panel-2); }
+  tfoot td{ color:var(--white); border-top:1px solid var(--rule-hi); }
+
+  .chip{
+    display:inline-block; font-family:var(--mono); font-size:9.5px; letter-spacing:.2em;
+    text-transform:uppercase; padding:3px 8px; border:1px solid currentColor; white-space:nowrap;
+  }
+  .chip.hold{ color:var(--hold); }
+  .chip.fail{ color:var(--fail); }
+  .chip.part{ color:var(--warn); }
+
+  /* ---------- sequence ---------- */
+  .moves{ display:flex; flex-direction:column; gap:0; border-top:1px solid var(--rule); }
+  .move{
+    display:grid; grid-template-columns:88px 1fr; gap:24px;
+    padding:24px 0; border-bottom:1px solid var(--rule);
+  }
+  .move-n{
+    font-family:var(--mono); font-size:11px; letter-spacing:.2em; color:var(--titanium);
+    text-transform:uppercase; padding-top:4px;
+  }
+  .move-n b{ display:block; font-size:30px; letter-spacing:.02em; color:var(--chengal-hi); font-weight:400; }
+  .move-body{ display:flex; flex-direction:column; gap:10px; }
+  .move-body h3{ color:var(--white); font-size:13px; letter-spacing:.22em; }
+  .move-body p{ max-width:62ch; }
+  .releases{ font-family:var(--mono); font-size:11px; letter-spacing:.14em; color:var(--titanium); text-transform:uppercase; }
+  .releases b{ color:var(--chengal-hi); font-weight:400; }
+
+  /* ---------- figures ---------- */
+  figure{ margin:0; border:1px solid var(--rule-hi); background:var(--panel); }
+  .figwrap{ overflow-x:auto; padding:26px 24px 8px; }
+  figure svg{ display:block; min-width:640px; max-width:100%; height:auto; color:var(--titanium); }
+  figcaption{
+    font-family:var(--mono); font-size:11px; line-height:1.7; letter-spacing:.06em;
+    color:var(--titanium); border-top:1px solid var(--rule); padding:14px 24px;
+  }
+  figcaption b{ color:var(--white); font-weight:400; }
+
+  .grid2{ display:grid; grid-template-columns:repeat(auto-fit,minmax(280px,1fr)); gap:18px; }
+  ul.spec{ list-style:none; padding:0; margin:0; display:flex; flex-direction:column; gap:0; }
+  ul.spec li{ border-top:1px solid var(--rule); padding:10px 0; display:flex; gap:14px; font-size:16px; }
+  ul.spec li:first-child{ border-top:0; }
+  ul.spec .lbl{
+    font-family:var(--mono); font-size:10.5px; letter-spacing:.2em; text-transform:uppercase;
+    color:var(--titanium); min-width:118px; padding-top:5px; flex:0 0 118px;
+  }
+  ol.plain{ margin:0; padding-left:1.3em; max-width:var(--col); display:flex; flex-direction:column; gap:10px; }
+  ul.plain{ margin:0; padding-left:1.1em; max-width:var(--col); display:flex; flex-direction:column; gap:10px; }
+  li::marker{ color:var(--titanium); }
+
+  .term{
+    font-family:var(--mono); font-size:12.5px; line-height:2; letter-spacing:.05em;
+    color:var(--titanium); background:#040404; border:1px solid var(--rule-hi);
+    padding:20px 22px; white-space:pre-wrap; overflow-x:auto;
+  }
+  .term .w{ color:var(--white); }
+  .term .a{ color:var(--chengal-hi); }
+
+  /* ---------- alternatives ---------- */
+  .alts{ display:flex; flex-direction:column; gap:0; border-top:1px solid var(--rule); }
+  .alt{
+    display:grid; grid-template-columns:132px 1fr; gap:24px;
+    padding:24px 0; border-bottom:1px solid var(--rule);
+  }
+  .alt-id{ display:flex; flex-direction:column; gap:4px; padding-top:3px; }
+  .alt-id .code{ font-family:var(--mono); font-size:11px; letter-spacing:.2em; color:var(--chengal-hi); text-transform:uppercase; }
+  .alt-id .cost{ font-family:var(--mono); font-size:10.5px; letter-spacing:.12em; color:var(--titanium); font-variant-numeric:tabular-nums; }
+  .alt-body{ display:flex; flex-direction:column; gap:10px; }
+  .alt-body h3{ color:var(--white); font-size:13px; letter-spacing:.22em; }
+  .alt-body p{ max-width:62ch; }
+
+  .decide{ display:grid; grid-template-columns:24px 1fr; gap:14px; padding:14px 0; border-top:1px solid var(--rule); }
+  .decide:first-of-type{ border-top:0; }
+  .box{ width:14px; height:14px; border:1px solid var(--titanium); margin-top:6px; }
+  .decide p{ max-width:62ch; }
+  .decide .q{ font-family:var(--mono); font-size:12px; letter-spacing:.14em; text-transform:uppercase; color:var(--white); display:block; margin-bottom:4px; }
+
+  footer{ padding:44px 0 0; }
+  .signoff{
+    font-family:var(--mono); font-size:11px; letter-spacing:.3em; text-transform:uppercase;
+    color:var(--titanium);
+  }
+
+  @media (max-width:640px){
+    body{ font-size:16px; }
+    .move,.alt{ grid-template-columns:1fr; gap:10px; }
+    ul.spec li{ flex-direction:column; gap:2px; }
+    ul.spec .lbl{ flex-basis:auto; padding-top:0; }
+  }
+</style>
+
+<div class="page">
+
+<header class="masthead">
+  <div class="eyebrow">NOUGHT<b>VAULT</b> &nbsp;//&nbsp; ENCLOSURE 001 · THE WEIGHT</div>
+  <h1>It holds down the electricity bill. It has done so for eleven years.</h1>
+  <p class="deck">A chengal desk block that is, and always has been, a paperweight. The Genesis Plate lives in its floor. Enclosure 000 conceals the plate for one evening; this conceals it for a generation — which is a different engineering problem, a different threat model, and a different set of answers.</p>
+  <div class="stamp">Internal — never listed · sold only behind the gate</div>
+</header>
+
+<section>
+  <div class="sec-head">
+    <h3>// 00</h3>
+    <h2>A different job from Enclosure 000</h2>
+  </div>
+  <div class="prose-stack">
+    <p>Enclosure 000 is theatre with a deadline. It exists to make the first thirty seconds of ownership an initiation, and its job ends the moment the box is first opened. Everything about it — the struck Ø, the three-move sequence, the sealed envelope in the shipper — is tuned to a single evening.</p>
+    <p><strong>Enclosure 001 has the opposite duty cycle.</strong> It is opened once, then sits on a desk for years being looked at, picked up, lent to a guest to flatten a warranty card, moved house twice, and — the part that matters — eventually inherited. Its concealment has to survive being <em>boring</em> for a very long time, which is a harder thing to design than a surprise.</p>
+    <p>That difference reverses several decisions that were correct for 000. Those reversals are deliberate, and each one is listed below so nobody later reads this as an inconsistency.</p>
+  </div>
+
+  <div class="scroll">
+    <table>
+      <caption>Decisions that flip between the two enclosures</caption>
+      <thead><tr><th>Decision</th><th>Enclosure 000</th><th>Enclosure 001</th><th>Why it flips</th></tr></thead>
+      <tbody>
+        <tr>
+          <td class="k">Brand mark</td><td>Struck Ø on the base</td><td class="k">No mark of any kind</td>
+          <td>A Ø is a signpost. On an object whose only defence is being uninteresting, the mark is the vulnerability.</td>
+        </tr>
+        <tr>
+          <td class="k">Timber</td><td>American black walnut, imported</td><td class="k">Reclaimed Malaysian chengal</td>
+          <td>Century-old salvage has already finished moving — it solves the humidity problem 000 flagged, and it is local.</td>
+        </tr>
+        <tr>
+          <td class="k">Fallback copy</td><td>Sealed envelope inside the shipper</td><td class="k">Card lodged outside the house</td>
+          <td>The object never leaves the desk. A fallback stored beside it defeats the concealment it protects.</td>
+        </tr>
+        <tr>
+          <td class="k">Per-unit variation</td><td>Rejected — one sequence per batch</td><td class="k">Four geometries, randomly assigned</td>
+          <td>For a one-time reveal, variation is pure cost. For permanent concealment, "every NoughtVault block opens the same way" is a real exposure.</td>
+        </tr>
+        <tr>
+          <td class="k">Openable without the key</td><td>Not a consideration</td><td class="k">Yes — by design, with two pencils</td>
+          <td>An heirloom that can brick itself fails the intergenerational promise outright.</td>
+        </tr>
+        <tr>
+          <td class="k">Magnets</td><td>Absent</td><td class="k">Actively excluded</td>
+          <td>The steel ballast makes a magnetic latch findable with a fridge magnet. See //&nbsp;04.</td>
+        </tr>
+        <tr>
+          <td class="k">Commercial role</td><td>Free packaging, never listed</td><td class="k">Paid SKU, still never listed</td>
+          <td>At ≈ RM 218 it cannot be given away — but listing it publishes the hiding place. See //&nbsp;08.</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<section>
+  <div class="sec-head">
+    <h3>// 01</h3>
+    <h2>Chengal, pasak, and a house that already did this job</h2>
+  </div>
+  <div class="prose-stack">
+    <p>The block is cut from <strong>reclaimed chengal</strong> — <em>Neobalanocarpus heimii</em>, the timber Peninsular Malaysia built its houses, its mosques and its fishing boats from. Standing chengal is now restricted and the species is listed as endangered, so the stock does not come from a forest. It comes from demolition: <em>chengal lama</em>, salvaged from kampung houses, boat frames and bridge timbers, sold by salvage yards in Kelantan, Terengganu and Pahang and by the reclaimed-timber trade around Balakong and Kuang.</p>
+    <p>This is not a story bolted onto a material choice. It is the material choice, and it pays for itself three times over.</p>
+  </div>
+
+  <div class="grid2">
+    <div class="panel">
+      <h3>It solves the humidity problem</h3>
+      <p>Enclosure 000 named seasonal movement as the risk that would actually bite. Eighty-year-old chengal has already done every bit of moving it intends to do. Its moisture content has cycled through four hundred monsoons and settled. A sliding fit cut into salvage stock stays the fit you cut.</p>
+    </div>
+    <div class="panel">
+      <h3>It is the densest thing you can legally get</h3>
+      <p>Chengal runs ≈ 915 kg/m³ air-dry against walnut's ≈ 610. The block lands at a genuine paperweight mass without looking oversized, and it takes a slide surface that burnishes rather than furs.</p>
+    </div>
+    <div class="panel">
+      <h3>The mechanism is already Malaysian</h3>
+      <p>A <em>rumah kayu</em> is assembled with <em>tanggam</em> joints and locked with <em>pasak</em> — wooden pegs, no nails. The release here is two pasak, 5&nbsp;mm, cut from the same billet. The peg that held the house together now holds the box shut. That is the whole brand in one detail, and it costs nothing.</p>
+    </div>
+  </div>
+
+  <div class="callout">
+    <p><strong>Say none of this to the customer before they own it.</strong> The provenance is the best copy the brand will ever have and it is also a description of a hiding place. It belongs in the post-purchase channel, in the same terminal type as the gate — never in a listing, never in an alt tag.</p>
+  </div>
+</section>
+
+<section>
+  <div class="sec-head">
+    <h3>// 02</h3>
+    <h2>The object</h2>
+  </div>
+  <div class="prose-stack">
+    <p>Four layers, stack-laminated in sequence from one billet, exactly as Enclosure 000 — the same manufacturing logic, the same 2.5-D pockets, the same single CNC setup, so the workshop that builds 000 can build this without relearning anything. Every internal feature is a pocket. Nothing is joined; nothing is hinged.</p>
+    <p>The outside is a plain rectangular block, eased 1.5&nbsp;mm on every arris, oiled, unmarked. No logo, no name, no number, no Ø. Out of context it is a paperweight. In context it is also a paperweight, which is the point.</p>
+  </div>
+
+  <div class="grid2">
+    <div class="panel">
+      <h3>Exterior</h3>
+      <ul class="spec">
+        <li><span class="lbl">Material</span><span>Reclaimed chengal (<em>Neobalanocarpus heimii</em>), quarter-sawn where the salvage allows</span></li>
+        <li><span class="lbl">Envelope</span><span>150 × 95 × 40 mm</span></li>
+        <li><span class="lbl">Mass</span><span>≈ 920 g loaded &nbsp;·&nbsp; ≈ 835 g empty</span></li>
+        <li><span class="lbl">Finish</span><span>Hard-wax oil ×3, all faces including interiors; paraffin burnished on slide faces</span></li>
+        <li><span class="lbl">Feet</span><span>4 × ⌀8 grain-matched chengal plugs, friction fit, black wool pad on each</span></li>
+        <li><span class="lbl">Mark</span><span>None</span></li>
+      </ul>
+    </div>
+    <div class="panel">
+      <h3>Interior</h3>
+      <ul class="spec">
+        <li><span class="lbl">Ballast</span><span>100 × 76 × 6.5 mm mild steel, black oxide, epoxy-bedded, permanent</span></li>
+        <li><span class="lbl">Plate pocket</span><span>94 × 74 × 6 mm — 1.5 mm felt, plate, 1.5 mm felt</span></li>
+        <li><span class="lbl">Release</span><span>2 × ⌀5 × 16 mm chengal pasak, nitrile O-ring detent</span></li>
+        <li><span class="lbl">Slide</span><span>Stopped tapered dovetail, travel along the grain, one direction</span></li>
+        <li><span class="lbl">Not present</span><span>Screws, magnets, springs, electronics, batteries, labels, instructions, glue in the mechanism</span></li>
+      </ul>
+    </div>
+  </div>
+
+  <figure>
+    <div class="figwrap">
+      <svg viewBox="0 0 780 400" role="img" aria-label="Section elevation of the four-layer block: a 14 millimetre top skin, an 8 millimetre ring holding a permanent steel ballast slug, a 6 millimetre ring holding the titanium Genesis Plate on felt, and a 12 millimetre sliding base — 40 millimetres overall. The steel sits above the titanium, so a detector sweeping the top face finds the ballast first.">
+        <defs>
+          <marker id="e1-ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+            <polygon points="0,0 10,5 0,10" fill="currentColor"/>
+          </marker>
+          <marker id="e1-ar-a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+            <polygon points="0,0 10,5 0,10" fill="#C6903F"/>
+          </marker>
+        </defs>
+
+        <!-- detector sweep, above the block -->
+        <g font-family="monospace" font-size="10.5" letter-spacing="1.2">
+          <line x1="180" y1="30" x2="470" y2="30" stroke="#5A6066" stroke-width="1" stroke-dasharray="5 4" marker-end="url(#e1-ar-a)"/>
+          <text x="180" y="22" fill="#5A6066">DETECTOR / MAGNET SWEEPS THE TOP FACE</text>
+          <text x="482" y="34" fill="#5A6066">stops here ↓</text>
+        </g>
+
+        <!-- TOP SKIN -->
+        <rect x="180" y="48" width="380" height="28" fill="#2A1B08" stroke="#C6903F" stroke-width="1"/>
+
+        <!-- BALLAST RING -->
+        <rect x="180" y="106" width="34" height="30" fill="#2A1B08" stroke="#C6903F" stroke-width="1"/>
+        <rect x="526" y="106" width="34" height="30" fill="#2A1B08" stroke="#C6903F" stroke-width="1"/>
+        <rect x="220" y="112" width="300" height="18" fill="#5A6066" stroke="#9AA3A8" stroke-width="1"/>
+        <text x="370" y="125" font-family="monospace" font-size="10.5" fill="#FFFFFF" text-anchor="middle" letter-spacing="1.6">STEEL BALLAST · 388 g · PERMANENT</text>
+
+        <!-- PLATE RING -->
+        <rect x="180" y="166" width="34" height="26" fill="#2A1B08" stroke="#C6903F" stroke-width="1"/>
+        <rect x="526" y="166" width="34" height="26" fill="#2A1B08" stroke="#C6903F" stroke-width="1"/>
+        <rect x="220" y="170" width="300" height="4" fill="#0C0C0C" stroke="#2C2C2C" stroke-width="1"/>
+        <rect x="220" y="174" width="300" height="10" fill="#9AA3A8" stroke="#FFFFFF" stroke-width="1"/>
+        <rect x="220" y="184" width="300" height="4" fill="#0C0C0C" stroke="#2C2C2C" stroke-width="1"/>
+        <text x="370" y="182" font-family="monospace" font-size="10.5" fill="#000000" text-anchor="middle" letter-spacing="1.6">TA2 GENESIS PLATE · 90 × 70 × 3</text>
+
+        <!-- pasak pegs, hanging from the plate ring into the base detents -->
+        <rect x="196" y="192" width="10" height="26" fill="#7A5320" stroke="#C6903F" stroke-width="1"/>
+        <rect x="534" y="192" width="10" height="26" fill="#7A5320" stroke="#C6903F" stroke-width="1"/>
+
+        <!-- SLIDING BASE, drawn offset right to read as the moving layer -->
+        <rect x="206" y="224" width="380" height="26" fill="#2A1B08" stroke="#FFFFFF" stroke-width="1"/>
+        <rect x="196" y="224" width="10" height="8" fill="none" stroke="#C6903F" stroke-width="1"/>
+        <rect x="534" y="224" width="10" height="8" fill="none" stroke="#C6903F" stroke-width="1"/>
+        <line x1="596" y1="237" x2="666" y2="237" stroke="#C6903F" stroke-width="1" marker-end="url(#e1-ar-a)"/>
+        <text x="674" y="241" font-family="monospace" font-size="10" fill="#C6903F" letter-spacing="1.2">SLIDES</text>
+
+        <!-- feet plugs under the base -->
+        <g fill="#7A5320" stroke="#C6903F" stroke-width="1">
+          <rect x="236" y="250" width="20" height="8"/>
+          <rect x="330" y="250" width="20" height="8"/>
+          <rect x="442" y="250" width="20" height="8"/>
+          <rect x="536" y="250" width="20" height="8"/>
+        </g>
+        <text x="396" y="274" font-family="monospace" font-size="10" fill="#8A8C8E" text-anchor="middle" letter-spacing="1.2">FOUR PLUGGED FEET — TWO HIDE A ⌀5 THROUGH-BORE</text>
+
+        <!-- left labels -->
+        <g font-family="monospace" font-size="10.5" fill="currentColor" text-anchor="end" letter-spacing="1.2">
+          <text x="168" y="58">TOP SKIN</text><text x="168" y="71" fill="#8A8C8E">14 mm · fixed</text>
+          <text x="168" y="118">BALLAST RING</text><text x="168" y="131" fill="#8A8C8E">8 mm · fixed</text>
+          <text x="168" y="176">PLATE RING</text><text x="168" y="189" fill="#8A8C8E">6 mm · fixed</text>
+          <text x="168" y="236">SLIDING BASE</text><text x="168" y="249" fill="#8A8C8E">12 mm · moves</text>
+        </g>
+
+        <!-- right callouts -->
+        <g font-family="monospace" font-size="10" fill="#9AA3A8" letter-spacing="1.2">
+          <line x1="520" y1="121" x2="600" y2="100" stroke="#9AA3A8" stroke-width="1"/>
+          <text x="606" y="98" fill="#FFFFFF">THE COVER STORY</text>
+          <text x="606" y="112" fill="#8A8C8E">a paperweight is</text>
+          <text x="606" y="124" fill="#8A8C8E">supposed to have</text>
+          <text x="606" y="136" fill="#8A8C8E">metal in it</text>
+          <line x1="520" y1="179" x2="600" y2="170" stroke="#9AA3A8" stroke-width="1"/>
+          <text x="606" y="168" fill="#FFFFFF">THE SECRET</text>
+          <text x="606" y="182" fill="#8A8C8E">shielded above by</text>
+          <text x="606" y="194" fill="#8A8C8E">6.5 mm of steel</text>
+        </g>
+
+        <!-- overall dimension -->
+        <g stroke="currentColor" stroke-width="1" fill="none">
+          <line x1="130" y1="48" x2="130" y2="250" marker-start="url(#e1-ar)" marker-end="url(#e1-ar)"/>
+        </g>
+        <text x="122" y="153" font-family="monospace" font-size="11" fill="#FFFFFF" text-anchor="end" letter-spacing="1.2">40 mm</text>
+
+        <!-- mass ledger -->
+        <line x1="60" y1="300" x2="720" y2="300" stroke="#1B1B1B" stroke-width="1"/>
+        <g font-family="monospace" font-size="10.5" letter-spacing="1.3">
+          <text x="60" y="322" fill="#8A8C8E">CHENGAL 437 g</text>
+          <text x="212" y="322" fill="#8A8C8E">+ STEEL 388 g</text>
+          <text x="352" y="322" fill="#8A8C8E">+ TITANIUM 85 g</text>
+          <text x="506" y="322" fill="#8A8C8E">+ FELT &amp; PLUGS 9 g</text>
+          <text x="668" y="322" fill="#FFFFFF">= 919 g</text>
+          <text x="60" y="344" fill="#8A8C8E">removing the plate loses 85 g — 9% — which no one has ever noticed by hand</text>
+        </g>
+      </svg>
+    </div>
+    <figcaption><b>Section elevation and mass ledger.</b> The stacking order is the design: steel above titanium means every casual probe of the top face — magnet, stud finder, knuckle — finds the ballast, and a paperweight containing a steel slug is exactly what a paperweight is supposed to be.</figcaption>
+  </figure>
+</section>
+
+<section>
+  <div class="sec-head">
+    <h3>// 03</h3>
+    <h2>The release — two pasak and a slide</h2>
+  </div>
+  <div class="prose-stack">
+    <p>The block has no seam a hand can find, no port, no keyhole and no visible fastener. The underside is a plain oiled face with four felt feet. Two of those feet are plugs over a ⌀5 through-bore; the other two are plugs over nothing.</p>
+    <p>Under normal use the block sits upright and gravity holds both pasak down in their detents, locking the base to the body. A nitrile O-ring on each peg adds about 5&nbsp;N of grip so that turning the block over — which people do, idly, constantly — does not float the pegs free.</p>
+  </div>
+
+  <div class="moves">
+    <div class="move">
+      <div class="move-n">Move<b>01</b></div>
+      <div class="move-body">
+        <h3>Lift two feet</h3>
+        <p>Invert the block. Pick out the two correct plugs with a fingernail; they are friction-fit and grain-matched, and they go back in afterwards. Beneath two of them is a bore. Beneath the other two is 3&nbsp;mm of solid chengal.</p>
+        <p class="releases">Exposes <b>the bores</b> — which exist nowhere else on the object.</p>
+      </div>
+    </div>
+    <div class="move">
+      <div class="move-n">Move<b>02</b></div>
+      <div class="move-body">
+        <h3>Press both pasak</h3>
+        <p>Seat the companion rest onto the two bores and press, or push two 5&nbsp;mm rods in by hand. Each pasak rises 3&nbsp;mm out of its detent. Both must be up at once and stay up — one alone releases nothing.</p>
+        <p class="releases">Releases <b>the base</b> — for as long as the pressure is held.</p>
+      </div>
+    </div>
+    <div class="move">
+      <div class="move-n">Move<b>03</b></div>
+      <div class="move-body">
+        <h3>Slide along the grain</h3>
+        <p>Holding both pegs up, slide the base out. It is a stopped tapered dovetail and it travels one way only. Under it: black felt and the plate. Slide it back and the pasak drop into their detents with an audible click — the object relocks itself, with no step to forget.</p>
+        <p class="releases">Releases <b>the Genesis Plate</b>.</p>
+      </div>
+    </div>
+  </div>
+
+  <figure>
+    <div class="figwrap">
+      <svg viewBox="0 0 780 300" role="img" aria-label="Three-move release: invert the block and lift two of the four plugged feet, press both pasak pegs upward through the exposed bores, then slide the base along the grain. Each part physically blocks the next, so the chain cannot be entered in the middle.">
+        <defs>
+          <marker id="e2-ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+            <polygon points="0,0 10,5 0,10" fill="#C6903F"/>
+          </marker>
+        </defs>
+
+        <!-- PANEL 1 -->
+        <g>
+          <text x="20" y="28" font-family="monospace" font-size="11" fill="#C6903F" letter-spacing="2">01 — LIFT TWO FEET</text>
+          <rect x="30" y="76" width="200" height="60" fill="#2A1B08" stroke="#C6903F" stroke-width="1"/>
+          <g fill="#7A5320" stroke="#C6903F" stroke-width="1">
+            <rect x="52" y="68" width="18" height="8"/>
+            <rect x="190" y="68" width="18" height="8"/>
+          </g>
+          <g fill="none" stroke="#FFFFFF" stroke-width="1" stroke-dasharray="3 3">
+            <rect x="52" y="46" width="18" height="8"/>
+            <rect x="190" y="46" width="18" height="8"/>
+          </g>
+          <line x1="61" y1="66" x2="61" y2="58" stroke="#C6903F" stroke-width="1" marker-end="url(#e2-ar)"/>
+          <line x1="199" y1="66" x2="199" y2="58" stroke="#C6903F" stroke-width="1" marker-end="url(#e2-ar)"/>
+          <text x="20" y="176" font-family="monospace" font-size="10" fill="#FFFFFF" letter-spacing="1">TWO BORES EXPOSED</text>
+          <text x="20" y="192" font-family="monospace" font-size="10" fill="#8A8C8E" letter-spacing="1">the other two feet are solid</text>
+        </g>
+
+        <!-- PANEL 2 -->
+        <g>
+          <text x="278" y="28" font-family="monospace" font-size="11" fill="#C6903F" letter-spacing="2">02 — PRESS BOTH PASAK</text>
+          <rect x="288" y="76" width="200" height="60" fill="#2A1B08" stroke="#C6903F" stroke-width="1"/>
+          <rect x="308" y="86" width="10" height="26" fill="#7A5320" stroke="#C6903F" stroke-width="1"/>
+          <rect x="458" y="86" width="10" height="26" fill="#7A5320" stroke="#C6903F" stroke-width="1"/>
+          <line x1="313" y1="130" x2="313" y2="112" stroke="#C6903F" stroke-width="1" marker-end="url(#e2-ar)"/>
+          <line x1="463" y1="130" x2="463" y2="112" stroke="#C6903F" stroke-width="1" marker-end="url(#e2-ar)"/>
+          <rect x="288" y="150" width="200" height="18" fill="#0C0C0C" stroke="#8A8C8E" stroke-width="1"/>
+          <rect x="308" y="142" width="10" height="8" fill="#9AA3A8"/>
+          <rect x="458" y="142" width="10" height="8" fill="#9AA3A8"/>
+          <text x="388" y="163" font-family="monospace" font-size="9.5" fill="#8A8C8E" text-anchor="middle" letter-spacing="1.4">COMPANION REST — OR TWO PENCILS</text>
+          <text x="278" y="192" font-family="monospace" font-size="10" fill="#8A8C8E" letter-spacing="1">both up at once, or nothing moves</text>
+        </g>
+
+        <!-- PANEL 3 -->
+        <g>
+          <text x="536" y="28" font-family="monospace" font-size="11" fill="#C6903F" letter-spacing="2">03 — SLIDE THE BASE</text>
+          <rect x="546" y="76" width="200" height="36" fill="#2A1B08" stroke="#C6903F" stroke-width="1"/>
+          <rect x="576" y="112" width="200" height="20" fill="#7A5320" stroke="#FFFFFF" stroke-width="1"/>
+          <line x1="700" y1="122" x2="762" y2="122" stroke="#C6903F" stroke-width="1" marker-end="url(#e2-ar)"/>
+          <rect x="566" y="88" width="146" height="8" fill="#9AA3A8" stroke="#FFFFFF" stroke-width="1"/>
+          <text x="536" y="176" font-family="monospace" font-size="10" fill="#FFFFFF" letter-spacing="1">THE PLATE</text>
+          <text x="536" y="192" font-family="monospace" font-size="10" fill="#8A8C8E" letter-spacing="1">slide back — it relocks itself</text>
+        </g>
+
+        <!-- dependency chain -->
+        <line x1="20" y1="226" x2="760" y2="226" stroke="#1B1B1B" stroke-width="1"/>
+        <g font-family="monospace" font-size="10" letter-spacing="1.4">
+          <text x="20" y="250" fill="#8A8C8E">KNOWING WHICH TWO FEET</text>
+          <line x1="196" y1="246" x2="234" y2="246" stroke="#C6903F" stroke-width="1" marker-end="url(#e2-ar)"/>
+          <text x="242" y="250" fill="#8A8C8E">BORES</text>
+          <line x1="298" y1="246" x2="336" y2="246" stroke="#C6903F" stroke-width="1" marker-end="url(#e2-ar)"/>
+          <text x="344" y="250" fill="#8A8C8E">PASAK UP ×2</text>
+          <line x1="446" y1="246" x2="484" y2="246" stroke="#C6903F" stroke-width="1" marker-end="url(#e2-ar)"/>
+          <text x="492" y="250" fill="#8A8C8E">BASE FREE</text>
+          <line x1="578" y1="246" x2="616" y2="246" stroke="#C6903F" stroke-width="1" marker-end="url(#e2-ar)"/>
+          <text x="624" y="250" fill="#FFFFFF">PLATE</text>
+        </g>
+        <text x="20" y="274" font-family="monospace" font-size="9.5" fill="#8A8C8E" letter-spacing="1.2">the only secret in the chain is the first link — everything after it is obvious once you are holding it open</text>
+      </svg>
+    </div>
+    <figcaption><b>Release sequence and its dependency chain.</b> Unlike Enclosure 000, the difficulty is deliberately front-loaded: all of the concealment lives in <b>not knowing there is anything to open</b>, and none of it lives in the mechanism being hard.</figcaption>
+  </figure>
+
+  <figure>
+    <div class="figwrap">
+      <svg viewBox="0 0 780 340" role="img" aria-label="Underside plan of the block showing four identical plugged feet on a 104 by 60 millimetre rectangle, of which one long-side pair conceals through-bores and the other conceals blind dimples, beside the companion rest whose two brass pins sit at the same 104 millimetre centres.">
+        <defs>
+          <marker id="e3-ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+            <polygon points="0,0 10,5 0,10" fill="#C6903F"/>
+          </marker>
+        </defs>
+
+        <!-- block underside -->
+        <text x="40" y="34" font-family="monospace" font-size="11" fill="#FFFFFF" letter-spacing="2">UNDERSIDE — PLAN</text>
+        <rect x="40" y="50" width="380" height="241" fill="#0C0C0C" stroke="#C6903F" stroke-width="1"/>
+        <rect x="46" y="56" width="368" height="229" fill="#2A1B08" stroke="#7A5320" stroke-width="1"/>
+
+        <!-- four feet -->
+        <g stroke="#C6903F" stroke-width="1" fill="#7A5320">
+          <circle cx="108" cy="104" r="10"/>
+          <circle cx="352" cy="104" r="10"/>
+          <circle cx="108" cy="237" r="10"/>
+          <circle cx="352" cy="237" r="10"/>
+        </g>
+        <g stroke="#FFFFFF" stroke-width="1" fill="none" stroke-dasharray="3 2">
+          <circle cx="108" cy="237" r="6"/>
+          <circle cx="352" cy="237" r="6"/>
+        </g>
+
+        <!-- centres -->
+        <g stroke="#8A8C8E" stroke-width="1" fill="none">
+          <line x1="108" y1="300" x2="352" y2="300" marker-start="url(#e3-ar)" marker-end="url(#e3-ar)"/>
+        </g>
+        <text x="230" y="318" font-family="monospace" font-size="10" fill="#8A8C8E" text-anchor="middle" letter-spacing="1.2">104 mm CENTRES</text>
+
+        <text x="126" y="100" font-family="monospace" font-size="9.5" fill="#8A8C8E" letter-spacing="1.2">BLIND — 3 mm dimple</text>
+        <text x="126" y="233" font-family="monospace" font-size="9.5" fill="#FFFFFF" letter-spacing="1.2">THROUGH — ⌀5 to the pasak</text>
+        <text x="46" y="270" font-family="monospace" font-size="9.5" fill="#8A8C8E" letter-spacing="1.2">all four plugs look and feel identical with the pads on</text>
+
+        <!-- companion -->
+        <text x="470" y="34" font-family="monospace" font-size="11" fill="#FFFFFF" letter-spacing="2">COMPANION REST — PLAN</text>
+        <rect x="470" y="86" width="270" height="86" fill="#0C0C0C" stroke="#C6903F" stroke-width="1"/>
+        <rect x="476" y="92" width="258" height="74" fill="#2A1B08" stroke="#7A5320" stroke-width="1"/>
+        <circle cx="500" cy="129" r="7" fill="#9AA3A8" stroke="#FFFFFF" stroke-width="1"/>
+        <circle cx="710" cy="129" r="7" fill="#9AA3A8" stroke="#FFFFFF" stroke-width="1"/>
+        <g stroke="#8A8C8E" stroke-width="1" fill="none">
+          <line x1="500" y1="192" x2="710" y2="192" marker-start="url(#e3-ar)" marker-end="url(#e3-ar)"/>
+        </g>
+        <text x="605" y="210" font-family="monospace" font-size="10" fill="#8A8C8E" text-anchor="middle" letter-spacing="1.2">104 mm — the same</text>
+        <text x="470" y="240" font-family="monospace" font-size="9.5" fill="#8A8C8E" letter-spacing="1.2">⌀4.8 × 8 brass pins, read as feet</text>
+        <text x="470" y="256" font-family="monospace" font-size="9.5" fill="#8A8C8E" letter-spacing="1.2">a pen rest on the same desk, in plain sight</text>
+        <text x="470" y="280" font-family="monospace" font-size="9.5" fill="#C6903F" letter-spacing="1.2">VARIANTS — front pair or back pair,</text>
+        <text x="470" y="296" font-family="monospace" font-size="9.5" fill="#C6903F" letter-spacing="1.2">slide left or right: four, from one CNC parameter</text>
+      </svg>
+    </div>
+    <figcaption><b>Underside and the key that is not shaped like a key.</b> The companion rest carries the release geometry as its own feet — two desk objects that are furniture apart and a mechanism together. It is a convenience, never a dependency: any two 5&nbsp;mm rods do the same job.</figcaption>
+  </figure>
+
+  <div class="callout">
+    <p><strong>The companion must never be necessary.</strong> Two pencils open this block. That is a deliberate concession and it is not a weakness, because the concealment was never in the mechanism — it was in the fact that nobody is looking. An object that can lose its own key is an object that eventually becomes a sealed titanium coffin, and this brand sells the opposite of that.</p>
+  </div>
+</section>
+
+<section>
+  <div class="sec-head">
+    <h3>// 04</h3>
+    <h2>Why the ballast is the cleverest part</h2>
+  </div>
+  <div class="prose-stack">
+    <p>Steganography is not hiding a thing. It is giving the anomaly a boring explanation. The plate creates three anomalies in a wooden block — it is heavy, it is metal, and it is flat — and the ballast answers all three before anyone asks.</p>
+    <ul class="plain">
+      <li><strong>Mass.</strong> A 920&nbsp;g desk block is what a good paperweight weighs. Wood alone at this size gives you 520&nbsp;g, which feels like a souvenir. The ballast is doing genuine work, not just providing cover.</li>
+      <li><strong>Magnetism.</strong> Everyone who idly tests an object with a fridge magnet gets a satisfying answer, and the answer is <em>steel</em>. Titanium is not ferromagnetic; without a ballast, a wooden block that thuds dead against a magnet but weighs 900&nbsp;g is the interesting kind of strange.</li>
+      <li><strong>Sound.</strong> A knuckle on any face of the top skin hits 6.5&nbsp;mm of bedded steel and returns a dead, solid note. There is no hollow to find by tapping, which is the single most likely way a curious person discovers a false bottom.</li>
+    </ul>
+    <p>The ballast also settles the latch question. Magnetic releases are the obvious choice for a seamless block, and they are wrong here: a block with a steel slug in it responds to a magnet everywhere, so the owner would have to hunt for the sweet spot too — and worse, a magnetic latch is discoverable by anyone who runs a magnet along the faces, which is exactly the gesture the ballast invites. <strong>The cover story and a magnetic latch cannot coexist, so the latch is mechanical.</strong></p>
+  </div>
+  <div class="callout warn">
+    <p><strong>One anomaly the ballast does not fix.</strong> Under X-ray the two slabs read as two slabs, and one of them is engraved. Nothing in a wooden object solves this. If the block is ever going to cross a border in luggage, the plate should not be in it — which is a sentence that belongs in the owner's onboarding, not in a marketing claim.</p>
+  </div>
+</section>
+
+<section>
+  <div class="sec-head">
+    <h3>// 05</h3>
+    <h2>What the concealment actually buys</h2>
+  </div>
+  <div class="prose-stack">
+    <p>Enclosure 000's document says plainly that the box is not a security device. That remains true, and the same discipline has to hold here even though this object <em>does</em> raise the cost of an untargeted search — because the temptation to overclaim is much stronger when the claim is nearly true.</p>
+    <p>Here is the honest ledger. It is worth circulating internally before anyone writes a word of copy, because two rows of it are things NoughtVault must never imply it solves.</p>
+  </div>
+
+  <div class="scroll">
+    <table>
+      <caption>Threat ledger — concealment only</caption>
+      <thead><tr><th>Against</th><th>Result</th><th>Reasoning</th></tr></thead>
+      <tbody>
+        <tr><td class="k">Houseguest, cleaner, contractor</td><td><span class="chip hold">Holds</span></td><td>There is nothing to notice. No seam, no port, no mark, no hollow note.</td></tr>
+        <tr><td class="k">Opportunistic burglary, 4–8 min sweep</td><td><span class="chip hold">Holds</span></td><td>The real threat, and the one this defeats. They take screens, cash and jewellery from drawers. Desk furniture is not loot.</td></tr>
+        <tr><td class="k">Idle handling over years</td><td><span class="chip hold">Holds</span></td><td>Inverting it does nothing; the O-ring detents see to that. The feet look glued.</td></tr>
+        <tr><td class="k">Scale, or a knock test</td><td><span class="chip hold">Holds</span></td><td>It weighs and sounds like a metal-cored paperweight, because it is one.</td></tr>
+        <tr><td class="k">Fridge magnet</td><td><span class="chip hold">Holds</span></td><td>Answers "steel", which is the expected answer. No magnetic latch to find.</td></tr>
+        <tr><td class="k">Flood, roof leak, spill</td><td><span class="chip hold">Holds</span></td><td>Oiled chengal and a felted pocket. Open and dry the plate afterwards regardless.</td></tr>
+        <tr><td class="k">House fire</td><td><span class="chip part">Partial</span></td><td>The plate survives what the room does not — but it survives in the ash, unmarked and unfindable. See //&nbsp;06.</td></tr>
+        <tr><td class="k">Someone who watched a NoughtVault unboxing</td><td><span class="chip fail">Fails</span></td><td>They know the object class, the material and the shape. This is why it is never listed and never photographed open.</td></tr>
+        <tr><td class="k">Metal detector or pinpointer</td><td><span class="chip fail">Fails</span></td><td>The ballast makes the hit unremarkable, but a hit is a hit if someone is sweeping a desk on purpose.</td></tr>
+        <tr><td class="k">X-ray at a border</td><td><span class="chip fail">Fails</span></td><td>Two flat slabs, one engraved. Do not travel with it loaded.</td></tr>
+        <tr><td class="k">Coercion</td><td><span class="chip fail">Fails</span></td><td>No enclosure answers this. The decoy pair in ALT A is a partial answer at best, and should be described that way.</td></tr>
+        <tr><td class="k">Heirs clearing the house</td><td><span class="chip fail">Fails</span></td><td>The highest-probability loss event by a wide margin, and the only one the design can still do something about. See //&nbsp;06.</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="callout warn">
+    <p><strong>The line to hold in copy.</strong> Enclosure 000 said it: the box is a ritual, the plate is the protocol. This one earns a slightly stronger sentence and not one word more — <em>it is not a safe; it is a reason for nobody to look.</em> The moment marketing turns concealment into "a second layer of protection", the brand has made a security claim it cannot support, on an object whose entire defence evaporates the day it becomes famous.</p>
+  </div>
+</section>
+
+<section>
+  <div class="sec-head">
+    <h3>// 06</h3>
+    <h2>The inheritance problem — solve this or don't ship it</h2>
+  </div>
+  <div class="prose-stack">
+    <p>The product sells intergenerational wealth. The failure mode that actually destroys intergenerational wealth is not a burglar and not a fire. It is a skip outside a house being cleared in a fortnight by people who never knew what the paperweight was.</p>
+    <p>Enclosure 000 could put its fallback envelope in the shipper because the box lives in a drawer and its secret expires the same evening. Enclosure 001 cannot: a card stored beside the object is a card found with the object. So the fallback has to leave the building, and that changes it from a packing item into an instruction the customer has to act on.</p>
+  </div>
+
+  <div class="term"><span class="a">NOUGHT</span><span class="w">VAULT</span>  // ENCLOSURE 001
+<span class="w">&gt; RELEASE SEQUENCE RECEIVED. DO NOT STORE THIS BESIDE THE OBJECT.</span>
+
+  01  INVERT. LIFT THE <span class="w">FRONT</span> PAIR OF FEET.
+  02  PRESS BOTH PEGS. ANY TWO 5 MM RODS WILL DO.
+  03  HOLD, AND SLIDE THE FLOOR <span class="w">RIGHT</span>.
+
+<span class="a">&gt; THE BLOCK KNOWS NOTHING. IT DOES NOT KNOW IT IS A VAULT.</span>
+<span class="a">&gt; NEITHER WILL ANYONE CLEARING YOUR HOUSE. FILE THE CARD.</span></div>
+
+  <div class="prose-stack">
+    <p>Three things ship with the object to make that last line real, and none of them go in the same room as the block:</p>
+    <ul class="plain">
+      <li><strong>A steel card, not paper</strong>, sized for a document wallet, carrying the release lines and one further line: <em>"the chengal block on the desk is not a paperweight — do not discard it."</em> It names no brand and no contents. Anyone reading it already has the block; anyone finding it without the block learns nothing worth acting on.</li>
+      <li><strong>An explicit instruction to lodge it</strong> — with the will, with the solicitor, in the safe deposit, with the executor. Written as a step, not a suggestion, in the onboarding sequence.</li>
+      <li><strong>A support re-send</strong>, keyed to the order, that returns the four-variant geometry for that unit. This is the one place a per-unit record is justified, and it should hold the release geometry and nothing else — no address, no contents, no linkage worth stealing.</li>
+    </ul>
+    <p>And the fire case deserves its own sentence in the onboarding: <strong>after a fire, the plate is in the debris where the desk was, and it looks like scrap.</strong> Whoever clears the site needs to be told to sift, or the titanium survives 1668&nbsp;°C only to leave in a skip.</p>
+  </div>
+
+  <div class="callout">
+    <p><strong>This section is the product, commercially.</strong> Every competitor sells a metal plate. Nobody sells the part where your family still has the money in 2071. If any part of Enclosure 001 justifies its price, it is this — and it costs a steel card and a paragraph of onboarding.</p>
+  </div>
+</section>
+
+<section>
+  <div class="sec-head">
+    <h3>// 07</h3>
+    <h2>Timber — the shortlist, and the two to refuse</h2>
+  </div>
+  <div class="prose-stack">
+    <p>Enclosure 000 left "walnut, or something local?" open, and noted that chengal and merbau are cheaper and locally stocked but coarse and hard on cutters. At this size the calculus changes: the block is a fifth of the volume, so premium and difficult species become affordable, and density stops being a cost and starts being the function.</p>
+  </div>
+
+  <div class="scroll">
+    <table>
+      <caption>Malaysian species assessed for this object</caption>
+      <thead><tr><th>Species</th><th class="n">kg/m³</th><th>Verdict</th><th>Notes</th></tr></thead>
+      <tbody>
+        <tr>
+          <td class="k">Chengal, reclaimed<br><span style="color:var(--titanium)">Neobalanocarpus heimii</span></td><td class="n">≈ 915</td>
+          <td><span class="chip hold">Primary</span></td>
+          <td>Fully seasoned, dimensionally settled, deep golden-brown darkening with age. Silica content punishes tooling. Endangered standing — salvage only, with provenance paperwork.</td>
+        </tr>
+        <tr>
+          <td class="k">Balau<br><span style="color:var(--titanium)">Shorea spp., heavy</span></td><td class="n">850–1000</td>
+          <td><span class="chip hold">Substitute</span></td>
+          <td>The production answer if salvage yield disappoints. New kiln-dried stock, widely available, similar density, less character in the grain. Costs roughly half.</td>
+        </tr>
+        <tr>
+          <td class="k">Kayu arang<br><span style="color:var(--titanium)">Diospyros spp.</span></td><td class="n">≈ 1000+</td>
+          <td><span class="chip part">Limited run</span></td>
+          <td>Malaysian blackwood — true ebony, near-black, and on-brand to the point of parody. Small sizes and high price make it impossible at box scale and merely expensive at block scale. Scarce; verify legality per source.</td>
+        </tr>
+        <tr>
+          <td class="k">Nyatoh<br><span style="color:var(--titanium)">Palaquium spp.</span></td><td class="n">465–1000</td>
+          <td><span class="chip part">Prototype</span></td>
+          <td>Fine, even, forgiving, cheap and everywhere. Machine the first twenty mechanisms in nyatoh before a single piece of chengal goes near a cutter.</td>
+        </tr>
+        <tr>
+          <td class="k">Kempas<br><span style="color:var(--titanium)">Koompassia malaccensis</span></td><td class="n">770–1000</td>
+          <td><span class="chip fail">No</span></td>
+          <td>Interlocked grain and brittle heart. Moves and tears out on precision slide faces.</td>
+        </tr>
+        <tr>
+          <td class="k">Merbau<br><span style="color:var(--titanium)">Intsia palembanica</span></td><td class="n">≈ 800</td>
+          <td><span class="chip fail">Refuse</span></td>
+          <td>Beautiful and stable, and <em>Intsia</em> spp. are CITES Appendix II — every international shipment needs a permit. Not worth it for an object you are trying not to draw attention to.</td>
+        </tr>
+        <tr>
+          <td class="k">Belian<br><span style="color:var(--titanium)">Eusideroxylon zwageri</span></td><td class="n">≈ 1000+</td>
+          <td><span class="chip fail">Refuse</span></td>
+          <td>Borneo ironwood: magnificent, IUCN Vulnerable, and subject to Sarawak export restriction. The right answer is to leave it alone.</td>
+        </tr>
+        <tr>
+          <td class="k">Rubberwood<br><span style="color:var(--titanium)">Hevea brasiliensis</span></td><td class="n">≈ 600</td>
+          <td><span class="chip fail">No</span></td>
+          <td>Plantation, certified, cheap, pale and non-durable. Correct for the shipping crate, wrong for the object.</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="callout warn">
+    <p><strong>Reclaimed stock is not free of work.</strong> Salvage carries nails, screws, bolt shanks and grit. Every billet goes through a metal detector before it goes near a spindle or you will lose a cutter and possibly a hand. Budget 35–45% yield loss to nail holes, checks and beetle track — and choose the defects you keep, because a block with one old peg hole in the top face is more convincingly a paperweight than a flawless one.</p>
+  </div>
+
+  <div class="callout">
+    <p><strong>Paperwork to have before the first hundred.</strong> Provenance documentation from the salvage yard; species confirmation in writing; MTIB export licensing for the relevant HS code; a Lacey Act declaration for US-bound shipments; and, for the EU, confirmation of how the deforestation regulation treats reclaimed material for an operator of your size. Reclaimed timber is generally the easier position on all of these — but confirm it with a broker rather than with this document.</p>
+  </div>
+</section>
+
+<section>
+  <div class="sec-head">
+    <h3>// 08</h3>
+    <h2>Who builds it — the Malaysian bench</h2>
+  </div>
+  <div class="prose-stack">
+    <p>Enclosure 000's recommendation was a Klang Valley workshop for GENESIS BATCH 001, on the grounds that secrecy is enforceable with a site visit. That holds, and this object adds two requirements it did not have: someone who can read salvaged chengal, and someone who can hold a 0.25&nbsp;mm sliding fit in a silica-loaded hardwood.</p>
+    <p>Those are different people, and Malaysia has both. What follows is where to look, not a vetted list — every name here is an institution to approach, and each contact needs verifying before anyone commits a ringgit.</p>
+  </div>
+
+  <div class="grid2">
+    <div class="panel">
+      <h3>Species, testing, and proof</h3>
+      <p><strong>FRIM</strong>, Kepong — the Forest Research Institute's wood anatomy and identification service. They can confirm in writing that your salvage is <em>Neobalanocarpus heimii</em>, and they run the timber testing that turns "it feels stable" into a number. The <em>Malaysian Timbers</em> technical series is theirs and is the reference for every figure in //&nbsp;07.</p>
+      <p><strong>UPM</strong>, Serdang — the forestry and wood science faculty, for moisture-cycling work and for graduates who can run your QC properly.</p>
+    </div>
+    <div class="panel">
+      <h3>Regulation and export</h3>
+      <p><strong>MTIB</strong> (Lembaga Perindustrian Kayu Malaysia) — the industry board: export licensing, species and grading questions, and <strong>WISDEC</strong> in Banting for machining trials and prototyping capacity.</p>
+      <p><strong>MTCC</strong> — Malaysian Timber Certification Council, for MTCS/PEFC chain of custody if a sustainability claim is ever made in public. <strong>MTC</strong> for introductions to vetted manufacturers.</p>
+    </div>
+    <div class="panel">
+      <h3>Salvage and provenance</h3>
+      <p>Reclaimed-timber yards around <strong>Balakong</strong> and <strong>Kuang</strong>; kampung-house salvage dealers in <strong>Kelantan, Terengganu and Pahang</strong>; and the traditional boat-building yards of <strong>Pulau Duyong</strong>, where chengal offcuts and retired hull timbers are a normal trade good.</p>
+      <p>Ask for the demolition address and the year. It costs nothing, it makes the provenance real, and a yard that cannot answer is a yard whose species claim you should not trust either.</p>
+    </div>
+    <div class="panel">
+      <h3>Making, and the craft</h3>
+      <p><strong>Muar, Johor</strong> — the country's furniture cluster, where CNC capacity and hardwood experience sit in the same building. Right for volume, wrong for secrecy until you know the shop.</p>
+      <p><strong>Kraftangan Malaysia</strong> and the state craft complexes — the route to the <em>ukiran kayu</em> carvers of Terengganu and Kelantan, who are the people to talk to about tanggam, pasak, and the ALT&nbsp;E carved variant.</p>
+    </div>
+  </div>
+
+  <div class="callout warn">
+    <p><strong>Keep the vendor's brief in Malay and boring.</strong> Enclosure 000's vendor builds "a walnut display case". This vendor builds <em>pemberat kertas kayu chengal</em> — a chengal paperweight — with a serviceable base. No brand name in the drawings, no NoughtVault in the file names, no mention of what the pocket is for, and the ballast specified as ballast, which is exactly what it is. The concealment has to work at the supply chain layer first; everything downstream is wasted if a CNC operator's portfolio post gets there first.</p>
+  </div>
+</section>
+
+<section>
+  <div class="sec-head">
+    <h3>// 09</h3>
+    <h2>Cost — and the tension you have to resolve before it exists</h2>
+  </div>
+
+  <div class="scroll">
+    <table>
+      <caption>Estimated unit cost, MYR — quotes required</caption>
+      <thead><tr><th>Line</th><th class="n">Reclaimed chengal · 100 u</th><th class="n">Balau, new stock · 250 u</th></tr></thead>
+      <tbody>
+        <tr><td class="k">Billet (0.9 L incl. yield loss / 0.7 L)</td><td class="n">58</td><td class="n">26</td></tr>
+        <tr><td class="k">Metal-detect, de-nail, resaw, acclimatise 21 d</td><td class="n">14</td><td class="n">5</td></tr>
+        <tr><td class="k">CNC, 4 layers + plugs, carbide and tool-wear allowance</td><td class="n">52</td><td class="n">28</td></tr>
+        <tr><td class="k">Steel ballast, laser-cut, black oxide, epoxy-bedded</td><td class="n">11</td><td class="n">7</td></tr>
+        <tr><td class="k">Glue-up, sand, hard-wax oil ×3, felt</td><td class="n">32</td><td class="n">20</td></tr>
+        <tr><td class="k">Pasak, O-rings, pads, plugs</td><td class="n">6</td><td class="n">4</td></tr>
+        <tr><td class="k">Companion rest</td><td class="n">24</td><td class="n">15</td></tr>
+        <tr><td class="k">RH cycling, drop test, 12% reject allowance</td><td class="n">21</td><td class="n">11</td></tr>
+      </tbody>
+      <tfoot><tr><td class="k">Per unit</td><td class="n">≈ 218</td><td class="n">≈ 116</td></tr></tfoot>
+    </table>
+  </div>
+
+  <div class="prose-stack">
+    <p>At ≈ RM 218 this cannot be silent packaging the way Enclosure 000 can. It is 40% of the RM 540 ticket on its own. So it has to be sold — and that is the problem, because <strong>a concealment object you list publicly is a publicly documented hiding place.</strong> Every listing, review, photo and unboxing of a NoughtVault paperweight tells the world that NoughtVault paperweights open.</p>
+    <p>Three ways out, and only one of them survives contact with the brand:</p>
+  </div>
+
+  <div class="grid2">
+    <div class="panel">
+      <h3>List it publicly</h3>
+      <p>Simplest, most revenue, and it destroys the product. Reject.</p>
+    </div>
+    <div class="panel">
+      <h3>Bundle it silently</h3>
+      <p>Ship it as packaging like 000, absorb RM 218, and never mention it. Preserves the secret perfectly and prices the plate out of its own market. Reject on margin.</p>
+    </div>
+    <div class="panel">
+      <h3>Sell it behind the gate</h3>
+      <p>Offered post-purchase, to verified Genesis owners, on an unlisted page in the same terminal voice that let them in. Never in a collection, never indexed, never photographed open. <strong>This one.</strong></p>
+    </div>
+  </div>
+
+  <div class="callout">
+    <p><strong>The recommendation:</strong> build 40 in reclaimed chengal at ≈ RM 218 against GENESIS BATCH 001, offer them behind the gate at <strong>RM 420</strong>, and treat the run as sold out permanently rather than restocking. The gate already exists as a brand device and it is the literal answer to "operable in a way that is secret only to NoughtVault purchasers" — the object itself is only obtainable there. Scarcity also caps the exposure: forty blocks in the world is a rumour, four thousand is a known hiding place.</p>
+    <p>On variation, be clear-eyed. Four geometries cost one CNC parameter and are therefore worth taking. They are not worth believing in: anyone who knows the object class will try all six foot pairs in under a minute. The variation raises the cost of a rumour, not the cost of an attack.</p>
+  </div>
+</section>
+
+<section>
+  <div class="sec-head">
+    <h3>// 10</h3>
+    <h2>Alternatives</h2>
+  </div>
+  <div class="prose-stack">
+    <p>Five directions that are not the desk block, each solving something it doesn't. ALT&nbsp;B is the one I would fund alongside the primary — it is the only idea here that improves the customer's actual security rather than their odds of being overlooked.</p>
+  </div>
+
+  <div class="alts">
+    <div class="alt">
+      <div class="alt-id"><span class="code">ALT A</span><span class="cost">≈ RM 390 / pair</span></div>
+      <div class="alt-body">
+        <h3>The Pair — matched decoy twins</h3>
+        <p>Two blocks resawn in sequence from one billet, grain running continuously from one to the other, identical in mass and mechanism. One holds a plate. One holds a second ballast slug where the plate would be, so it weighs the same, sounds the same and opens the same. Sold as bookends or as desk-and-shelf.</p>
+        <p>This is the only partial answer to coercion on the page, and it should be described in exactly those words — a person under duress can open one. It is not protection; it is one more thing that has to be true before the situation gets worse. Sell it plainly or not at all.</p>
+      </div>
+    </div>
+
+    <div class="alt">
+      <div class="alt-id"><span class="code">ALT B</span><span class="cost">≈ RM 640 / set of 3</span></div>
+      <div class="alt-body">
+        <h3>The Three — a distributed set</h3>
+        <p>Three objects of three different kinds — the desk block, a coaster stack, a door stop — in three different rooms or three different buildings, each holding one plate carrying one share of a 2-of-3 split. Different woods, different mechanisms, nothing linking them by eye.</p>
+        <p>This is the strongest idea in the document. Concealment stops being the whole defence and becomes one factor among three; finding one object gains an attacker nothing; a fire in one room is survivable; and commercially it sells three plates and three enclosures to one customer. It also demands the most from onboarding, because a badly explained split loses money faster than any burglar.</p>
+      </div>
+    </div>
+
+    <div class="alt">
+      <div class="alt-id"><span class="code">ALT C</span><span class="cost">≈ RM 290</span></div>
+      <div class="alt-body">
+        <h3>The Plinth — a display base that displays something else</h3>
+        <p>A taller chengal column, 110 × 110 × 95&nbsp;mm, made to sit under a watch, a bonsai pot, a small sculpture or Enclosure 000 itself. Two plates stand on edge in the column. The release is a 15° rotation of the top platform against a stopped cam — a movement that only happens when the display object has been lifted off first, which is its own access control.</p>
+        <p>Better concealment than the paperweight, because whatever sits on top is what the eye lands on and the base becomes furniture beneath furniture. Worse as a product: it needs the customer to already own something worth displaying.</p>
+      </div>
+    </div>
+
+    <div class="alt">
+      <div class="alt-id"><span class="code">ALT D</span><span class="cost">≈ RM 70</span></div>
+      <div class="alt-body">
+        <h3>The Sole — no mechanism at all</h3>
+        <p>The plate is rebated into the underside of a plain chengal block, engraved face down, held by friction and gravity, and covered with a full-face leather or wool sole glued only at its perimeter. Peel the sole, the plate is there. No moving parts, no pasak, no slide, no tolerance stack, no humidity risk.</p>
+        <p>It is the budget option and it is more defensible than it sounds: against the houseguest and the four-minute burglar — the two threats that actually occur — it performs almost identically to the primary. What it loses is the ritual, the repeatability, and the ability to survive anyone who ever turns it over and looks properly. Worth building as the volume SKU if the gate run sells out.</p>
+      </div>
+    </div>
+
+    <div class="alt">
+      <div class="alt-id"><span class="code">ALT E</span><span class="cost">≈ RM 340</span></div>
+      <div class="alt-body">
+        <h3>Awan Larat — carving as camouflage</h3>
+        <p>The same block, its faces carved in the Terengganu <em>awan larat</em> scroll by a Kraftangan-network carver. The carving is not decoration: a relief pattern is where a seam goes to die. The slide gap, the glue lines and the plug edges all disappear into the ground of the motif in a way they never can on a flat oiled face.</p>
+        <p>It is also the single most effective disguise available, because a carved chengal souvenir is the most unremarkable object in a Malaysian home. The tension is real and worth naming: it is completely off-brand. NoughtVault is void-black, machined and mute, and this is warm, handmade and ornamental. My read is that the tension resolves in the object's favour — the brand's job is to be austere, the block's job is to be ignored — but it is a genuine identity decision, not a spec choice, and it is yours.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="prose-stack">
+    <p>Other carriers, sketched only: a bookend pair; a lamp base; a monitor riser or keyboard rest, which are big enough to hold four plates and are the least-moved objects on any desk; a <em>trivet</em> thick enough to matter; and the architectural version — a chengal threshold block or fitted shelf bracket, 5&nbsp;kg, screwed to the house, which never gets packed, never gets sold at a clearance, and is the closest thing to permanent this idea has.</p>
+  </div>
+</section>
+
+<section>
+  <div class="sec-head">
+    <h3>// 11</h3>
+    <h2>Open decisions — yours</h2>
+  </div>
+  <div>
+    <div class="decide"><div class="box"></div><p><span class="q">Gate-only, or bundle?</span>My vote is gate-only at RM 420, 40 units, never restocked. Bundling protects the secret better but the margin does not survive it.</p></div>
+    <div class="decide"><div class="box"></div><p><span class="q">Does the companion rest ship?</span>It is the most charming part and the most expendable — RM 24 for a key that two pencils replace. Ship it with the first forty, drop it if the run extends.</p></div>
+    <div class="decide"><div class="box"></div><p><span class="q">Reclaimed chengal, or balau?</span>Chengal for BATCH 001; the provenance is the story and the seasoning is the engineering. Balau is the honest answer if salvage yield comes in under 55%.</p></div>
+    <div class="decide"><div class="box"></div><p><span class="q">Steel card, or nothing?</span>Ship the card. The inheritance failure is the most likely way a customer loses their money, and //&nbsp;06 is the strongest thing this product has to say.</p></div>
+    <div class="decide"><div class="box"></div><p><span class="q">Fund ALT B?</span>Not for BATCH 001 — but the distributed set is the direction where this line stops being packaging and starts being a security product with a defensible claim. Worth a prototype in nyatoh this quarter.</p></div>
+    <div class="decide"><div class="box"></div><p><span class="q">Carved, or mute?</span>Genuinely open. ALT E conceals better and breaks the visual identity. Decide it as a brand question, not a spec one.</p></div>
+  </div>
+</section>
+
+<footer>
+  <p class="signoff">ENCLOSURE 001 · IT IS NOT A SAFE · IT IS A REASON FOR NOBODY TO LOOK</p>
+</footer>
+
+</div>
