@@ -1,0 +1,560 @@
+<title>NoughtVault — Textile 000 · The Batik Prints</title>
+
+<style>
+  /*
+    House identity, fourth document. 000 was walnut, 001 chengal, the Ledger
+    anodised titanium. This one is cloth, and the accent is the one thing a
+    resist process actually produces: undyed cotton. The accent is the absence
+    of dye, which is the whole argument of the document.
+    Single-theme by brand commitment, as in every document before it.
+  */
+  :root{
+    --void:#000000;
+    --panel:#070707;
+    --panel-2:#0C0C0C;
+    --rule:#1B1B1B;
+    --rule-hi:#2C2C2C;
+    --titanium:#8A8C8E;
+    --white:#FFFFFF;
+    --prose:#C4BDB2;
+
+    --resist:#EDE6D6;      /* raw cotton — where the wax was */
+    --resist-dk:#4A443A;
+    --nila:#2F5B78;        /* the indigo dip */
+    --soga:#7A5320;        /* hot wax */
+
+    /* semantic, kept strictly separate from the accent */
+    --keep:#6FBF8E;
+    --kill:#FF5B5B;
+    --change:#D9A441;
+
+    --mono: ui-monospace,"Cascadia Mono",Consolas,"SFMono-Regular",Menlo,"DejaVu Sans Mono",monospace;
+    --serif: "Iowan Old Style","Palatino Linotype",Palatino,"Book Antiqua",Georgia,serif;
+    --col: 68ch;
+    --wide: 1000px;
+  }
+
+  html{ background:var(--void); color-scheme:dark; }
+  body{
+    background:var(--void); color:var(--prose);
+    font-family:var(--serif); font-size:17px; line-height:1.72;
+    -webkit-font-smoothing:antialiased;
+  }
+  .page{ max-width:var(--wide); margin:0 auto; padding:0 24px 120px; }
+  .page::before{
+    content:""; position:fixed; inset:0; pointer-events:none; z-index:0;
+    background:repeating-linear-gradient(0deg,rgba(255,255,255,.022) 0 1px,transparent 1px 3px);
+  }
+  .page > *{ position:relative; z-index:1; }
+
+  /* ---------- typographic chrome ---------- */
+  .eyebrow{
+    font-family:var(--mono); font-size:11px; letter-spacing:.42em;
+    text-transform:uppercase; color:var(--titanium);
+  }
+  .eyebrow b{ color:var(--white); font-weight:400; }
+
+  h1{
+    font-family:var(--mono); font-weight:400;
+    font-size:clamp(27px,4.4vw,42px); line-height:1.14; letter-spacing:.02em;
+    color:var(--white); text-wrap:balance; margin:18px 0 0;
+  }
+  h2{
+    font-family:var(--mono); font-weight:400; font-size:15px;
+    letter-spacing:.24em; text-transform:uppercase; color:var(--white);
+    margin:0; text-wrap:balance;
+  }
+  h3{
+    font-family:var(--mono); font-weight:400; font-size:12.5px;
+    letter-spacing:.2em; text-transform:uppercase; color:var(--titanium);
+    margin:0; text-wrap:balance;
+  }
+  p{ margin:0; max-width:var(--col); }
+  strong{ color:var(--white); font-weight:600; }
+  em{ color:var(--resist); font-style:italic; }
+  a{ color:var(--resist); }
+  a:focus-visible{ outline:2px solid var(--resist); outline-offset:3px; }
+
+  header.masthead{
+    border-bottom:1px solid var(--rule);
+    padding:64px 0 30px;
+    display:flex; flex-direction:column; gap:14px;
+  }
+  .deck{ max-width:64ch; color:var(--titanium); font-size:18px; }
+  .stamp{
+    display:inline-flex; align-items:center; gap:10px;
+    font-family:var(--mono); font-size:10.5px; letter-spacing:.28em;
+    text-transform:uppercase; color:var(--kill);
+    border:1px solid rgba(255,91,91,.35); padding:6px 12px; align-self:flex-start;
+  }
+  .stamp::before{ content:""; width:6px; height:6px; background:var(--kill); }
+
+  section{
+    padding:52px 0; border-bottom:1px solid var(--rule);
+    display:flex; flex-direction:column; gap:22px;
+  }
+  .sec-head{ display:flex; flex-direction:column; gap:8px; }
+  .prose-stack{ display:flex; flex-direction:column; gap:18px; }
+
+  /* ---------- panels, tables, callouts ---------- */
+  .panel{
+    border:1px solid var(--rule-hi); background:var(--panel);
+    padding:22px 24px; display:flex; flex-direction:column; gap:14px;
+  }
+  .panel p{ font-size:16px; }
+  .callout{ border-left:2px solid var(--resist); background:var(--panel); padding:18px 22px;
+            display:flex; flex-direction:column; gap:12px; }
+  .callout.warn{ border-left-color:var(--kill); }
+  .callout.good{ border-left-color:var(--keep); }
+  .callout p{ max-width:64ch; }
+
+  .scroll{ overflow-x:auto; border:1px solid var(--rule-hi); background:var(--panel); }
+  table{ border-collapse:collapse; width:100%; min-width:640px; font-family:var(--mono); font-size:12.5px; }
+  caption{
+    caption-side:top; text-align:left; font-family:var(--mono); font-size:10.5px;
+    letter-spacing:.28em; text-transform:uppercase; color:var(--titanium);
+    padding:16px 20px 10px;
+  }
+  th,td{ text-align:left; padding:11px 20px; border-top:1px solid var(--rule); vertical-align:top; }
+  th{ color:var(--titanium); font-weight:400; letter-spacing:.14em; text-transform:uppercase; font-size:10.5px; }
+  td{ color:var(--prose); }
+  td.k{ color:var(--white); white-space:nowrap; }
+  td.n{ font-variant-numeric:tabular-nums; text-align:right; white-space:nowrap; }
+  th.n{ text-align:right; }
+  td.neg{ color:var(--kill); }
+  td.pos{ color:var(--keep); }
+  tbody tr:hover td{ background:var(--panel-2); }
+  tfoot td{ color:var(--white); border-top:1px solid var(--rule-hi); }
+
+  .chip{
+    display:inline-block; font-family:var(--mono); font-size:9.5px; letter-spacing:.2em;
+    text-transform:uppercase; padding:3px 8px; border:1px solid currentColor; white-space:nowrap;
+  }
+  .chip.keep{ color:var(--keep); }
+  .chip.kill{ color:var(--kill); }
+  .chip.change{ color:var(--change); }
+  .chip.watch{ color:var(--resist); }
+
+  /* ---------- figures ---------- */
+  figure{ margin:0; border:1px solid var(--rule-hi); background:var(--panel); }
+  .figwrap{ overflow-x:auto; padding:26px 24px 8px; }
+  figure svg{ display:block; min-width:660px; max-width:100%; height:auto; color:var(--titanium); }
+  figcaption{
+    font-family:var(--mono); font-size:11px; line-height:1.7; letter-spacing:.06em;
+    color:var(--titanium); border-top:1px solid var(--rule); padding:14px 24px;
+  }
+  figcaption b{ color:var(--white); font-weight:400; }
+
+  .grid2{ display:grid; grid-template-columns:repeat(auto-fit,minmax(280px,1fr)); gap:18px; }
+
+  ul.spec{ list-style:none; padding:0; margin:0; display:flex; flex-direction:column; gap:0; }
+  ul.spec li{ border-top:1px solid var(--rule); padding:10px 0; display:flex; gap:14px; font-size:16px; }
+  ul.spec li:first-child{ border-top:0; }
+  ul.spec .lbl{
+    font-family:var(--mono); font-size:10.5px; letter-spacing:.2em; text-transform:uppercase;
+    color:var(--titanium); min-width:112px; padding-top:5px; flex:0 0 112px;
+  }
+  ol.plain{ margin:0; padding-left:1.3em; max-width:var(--col); display:flex; flex-direction:column; gap:12px; }
+  ul.plain{ margin:0; padding-left:1.1em; max-width:var(--col); display:flex; flex-direction:column; gap:12px; }
+  li::marker{ color:var(--titanium); }
+
+  .term{
+    font-family:var(--mono); font-size:12.5px; line-height:2; letter-spacing:.05em;
+    color:var(--titanium); background:#040404; border:1px solid var(--rule-hi);
+    padding:20px 22px; white-space:pre-wrap; overflow-x:auto;
+  }
+  .term .w{ color:var(--white); }
+  .term .a{ color:var(--resist); }
+
+  /* ---------- the routes ---------- */
+  .routes{ display:flex; flex-direction:column; gap:0; border-top:1px solid var(--rule); }
+  .route{
+    display:grid; grid-template-columns:146px 1fr 132px; gap:24px; align-items:start;
+    padding:22px 0; border-bottom:1px solid var(--rule);
+  }
+  .route-id{ display:flex; flex-direction:column; gap:4px; }
+  .route-id .code{ font-family:var(--mono); font-size:11px; letter-spacing:.2em; color:var(--resist); text-transform:uppercase; }
+  .route-id .sub{ font-family:var(--mono); font-size:10px; letter-spacing:.12em; color:var(--titanium); text-transform:uppercase; }
+  .route-body{ display:flex; flex-direction:column; gap:8px; }
+  .route-body p{ max-width:58ch; font-size:16px; }
+  .route-num{ display:flex; flex-direction:column; gap:3px; text-align:right; font-family:var(--mono); font-variant-numeric:tabular-nums; }
+  .route-num .price{ font-size:19px; color:var(--white); letter-spacing:.02em; }
+  .route-num .meta{ font-size:10.5px; letter-spacing:.1em; color:var(--titanium); text-transform:uppercase; }
+
+  .decide{ display:grid; grid-template-columns:24px 1fr; gap:14px; padding:14px 0; border-top:1px solid var(--rule); }
+  .decide:first-of-type{ border-top:0; }
+  .box{ width:14px; height:14px; border:1px solid var(--titanium); margin-top:6px; flex:none; }
+  .decide p{ max-width:62ch; }
+  .decide .q{ font-family:var(--mono); font-size:12px; letter-spacing:.14em; text-transform:uppercase; color:var(--white); display:block; margin-bottom:4px; }
+
+  footer{ padding:44px 0 0; display:flex; flex-direction:column; gap:14px; }
+  .signoff{
+    font-family:var(--mono); font-size:11px; letter-spacing:.3em; text-transform:uppercase;
+    color:var(--titanium);
+  }
+
+  @media (max-width:720px){
+    body{ font-size:16px; }
+    .route{ grid-template-columns:1fr; gap:12px; }
+    .route-num{ text-align:left; }
+    ul.spec li{ flex-direction:column; gap:2px; }
+    ul.spec .lbl{ flex-basis:auto; padding-top:0; }
+  }
+</style>
+
+<div class="page">
+
+<header class="masthead">
+  <div class="eyebrow">NOUGHT<b>VAULT</b> &nbsp;//&nbsp; TEXTILE 000 · THE BATIK PRINTS</div>
+  <h1>The oldest border motif in the archipelago is a keyhole upside down.</h1>
+  <p class="deck">A 350&nbsp;mm hand-drawn square that arrives wrapped around the plate and is never mentioned before it does. Ledger 000 Rev&nbsp;B put batik on the Kit and the Vault and priced it at RM&nbsp;42. The vendor's shelf ticket says RM&nbsp;19.90 — so the cost argument is dead, and the answer has to be re-derived from the only thing that still constrains it, which is secrecy.</p>
+  <div class="stamp">Internal — never listed · never in What's Included</div>
+</header>
+
+<section>
+  <div class="sec-head">
+    <h3>// 00</h3>
+    <h2>What the shop visit changed</h2>
+  </div>
+  <div class="prose-stack">
+    <p>Ledger 000 Rev&nbsp;B <span class="chip watch">§ 11</span> corrected Rev&nbsp;A's "batik on every SKU" down to "Kit and Vault only" on the strength of one number: a 45&nbsp;×&nbsp;45&nbsp;cm hand-resist square at roughly RM&nbsp;42, which is ¥69 against a ¥47 entry-SKU bill. That number came from an estimate. We now have shelf tickets, two production samples in hand, and a vendor.</p>
+    <p>Four things move. The conclusion does not — but its <em>reasoning</em> does, and that matters, because a conclusion held up by a cost argument falls over the moment costs change, and this one just did.</p>
+  </div>
+
+  <div class="scroll">
+    <table>
+      <caption>Corrections against Ledger 000 Rev B § 11</caption>
+      <thead><tr><th>Item</th><th>§ 11 said</th><th>Observed</th><th>Consequence</th></tr></thead>
+      <tbody>
+        <tr>
+          <td class="k">Unit cost</td><td>≈ RM 42 · 450 mm · est.</td><td class="k">RM 19.90 retail · 355 mm</td>
+          <td>Shelf price on a block-printed napkin, and RM 25.90 for the hand-drawn equivalent. <strong>Retail is already half the estimate</strong> — trade at volume is a different number again. <a href="#cost">§ 06</a>.</td>
+        </tr>
+        <tr>
+          <td class="k">Size</td><td>450 mm; "shrinking to 300 does not save it"</td><td class="k">355 mm is stock</td>
+          <td>355 mm — 14 inches — is the vendor's standing napkin size. Stock size means stock hem, stock cloth, no cutting waste and no minimum beyond theirs.</td>
+        </tr>
+        <tr>
+          <td class="k">The design</td><td>"Black wax on black ground"</td><td class="k">A colourway, not a design</td>
+          <td>§ 11 specified how it should be dyed and never said what it should show. That is this document. <a href="#motif">§ 02</a>.</td>
+        </tr>
+        <tr>
+          <td class="k">Which SKUs</td><td>Kit and Vault — <em>on cost</em></td><td class="k">Kit and Vault — <em>on secrecy</em></td>
+          <td>Same answer, load-bearing for a different reason. Cost arguments expire. <a href="#skus">§ 07</a>.</td>
+        </tr>
+        <tr>
+          <td class="k">Route</td><td>Unspecified</td><td class="k">Tulis for Batch 001</td>
+          <td>Copper block tooling does not amortise at 100 units — at that quantity the <em>hand-drawn</em> square is the cheaper one as well as the better one. <a href="#making">§ 05</a>.</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="callout good">
+    <p><strong>What survives untouched.</strong> § 11's actual insight, which is the reason to keep batik rather than drop it: <em>batik is a resist process — hot wax laid down so the dye cannot reach what is underneath, and what you see is the negative of what was protected.</em> That is a 700-year-old regional statement of this product's thesis, and it is true rather than borrowed. Everything below is an attempt to deserve that sentence.</p>
+  </div>
+</section>
+
+<section id="motif">
+  <div class="sec-head">
+    <h3>// 01</h3>
+    <h2>The motif — and the turn that makes it ours</h2>
+  </div>
+  <div class="prose-stack">
+    <p><strong>Pucuk rebung</strong> is the bamboo shoot: a row of tall isosceles triangles that runs across the <em>kepala kain</em>, the head panel of a sarong. It is shared across the region — <em>tumpal</em> in Javanese batik, the same triangle in Terengganu songket, in Bugis weaving, on Peranakan tiles — and it is probably the oldest ornamental band in the archipelago. It means what a shoot means: a thing that is almost entirely potential, growing from nothing.</p>
+    <p>Then rotate it a half turn.</p>
+    <p>An inverted isosceles triangle under a circle is a keyhole. It is <em>the</em> keyhole — the one in the NoughtVault mark, the one on the right-hand side of the vault door, next to the struck Ø. <strong>The border motif and the logo's keyhole are the same shape, and nobody had to make them so.</strong> That is the entire design and everything else in this document is execution.</p>
+  </div>
+
+  <figure>
+    <div class="figwrap">{{UNIFICATION}}</div>
+    <figcaption><b>The unification.</b> To anyone who did not buy the product, the cloth is a napkin carrying the most ordinary border in Malaysian textile. To the owner, the border is twenty-four keyholes. <b>No mark has to be explained, and nothing has to be hidden</b> — which is the only kind of concealment that survives being looked at.</figcaption>
+  </figure>
+
+  <div class="callout">
+    <p><strong>Why this beats the awan larat option.</strong> Enclosure 001 <span class="chip watch">ALT E</span> raised the Terengganu scroll as camouflage and named the tension honestly: it is warm, handmade and ornamental, and the brand is void-black, machined and mute. Pucuk rebung resolves that tension instead of paying it. It is a straight line and a triangle. It is the one traditional Malay motif that is already austere.</p>
+  </div>
+</section>
+
+<section>
+  <div class="sec-head">
+    <h3>// 02</h3>
+    <h2>Print 000 · Kepala 24</h2>
+  </div>
+  <div class="prose-stack">
+    <p>350&nbsp;mm finished from a 355&nbsp;mm cut, with a 2.5&nbsp;mm rolled hem — the vendor's stock napkin, unmodified. The layout is a sarong compressed into a square: two <em>kepala</em> bands facing each other across a plain <em>badan</em>, framed by a ruled <em>tepi</em>, with the mark alone in the field.</p>
+    <p><strong>Twelve shoots per band. Twenty-four in total.</strong> One per word of a twenty-four word recovery phrase. Nobody will notice, and the one customer who counts them will never be able to stop seeing it.</p>
+  </div>
+
+  <figure>
+    <div class="figwrap">{{SQUARE}}</div>
+    <figcaption><b>The full square, drawn at true proportion.</b> Every figure in this document is authored at two units per millimetre, so the drawings are the specification. The <b>tepi</b> carries 26 cecek a side — one per punch in the DC53 alphabet — which is ornament that happens to count, exactly like the shoots.</figcaption>
+  </figure>
+
+  <div class="callout warn">
+    <p><strong>It counts to 24. It does not store 24.</strong> This has to be said in writing now, before anyone reaches for it in copy. The cloth records nothing, encodes nothing, and recovers nothing. The brand has already been caught claiming a plate <em>survives</em> 1,668&nbsp;°C and calling a seal tamper-evident before the transfer test passed. A textile that hints it is part of the backup would be the third, and it would be the worst of the three, because this one would be charming.</p>
+  </div>
+
+  <figure>
+    <div class="figwrap">{{DETAIL}}</div>
+    <figcaption><b>One shoot at 4:1.</b> Three nested outlines are the canting convention — the wax pen draws the contour, then echoes it. The spine of three slashed noughts reads as the internodes of a bamboo shoot to one eye and as a stack of zeros to the other, <b>diminishing toward the apex because that is what a shoot does and what a balance should not.</b></figcaption>
+  </figure>
+</section>
+
+<section>
+  <div class="sec-head">
+    <h3>// 03</h3>
+    <h2>The mark, in batik language</h2>
+  </div>
+  <div class="prose-stack">
+    <p>The medallion is the vault door: a rounded double frame, two solid hinge blocks on the left, the slashed nought standing in for the dial, and the keyhole to its right. The hinges are the only filled mass anywhere on the cloth — everything else is line — which gives the eye somewhere to land in a design that is otherwise all contour.</p>
+    <p>The keyhole's shaft is a pucuk rebung, inverted, at the same proportion as the twenty-four in the borders. It is drawn with the same block, turned over.</p>
+  </div>
+
+  <figure>
+    <div class="figwrap">{{MEDALLION}}</div>
+    <figcaption><b>The medallion, 96 × 96 mm.</b> Drawn to be stamped from a second block, so the badan can also ship empty. <b>On the RAKING colourway the medallion is omitted entirely</b> — a mark you cannot see is not restraint, it is a mark you paid for and threw away.</figcaption>
+  </figure>
+
+  <div class="callout warn">
+    <p><strong>The rule the medallion inherits from Enclosure 001.</strong> That document refuses a brand mark on the chengal block, on the grounds that <em>a Ø is a signpost, and on an object whose only defence is being uninteresting the mark is the vulnerability.</em> That reasoning does not forbid the mark here — the cloth is not the hiding place — but it does impose the same rule the steel card gets in <span class="chip watch">001 § 06</span>: <strong>the cloth must never live in the same room as the block.</strong> Say it in the onboarding, in one line, without explaining why.</p>
+  </div>
+</section>
+
+<section>
+  <div class="sec-head">
+    <h3>// 04</h3>
+    <h2>Colourways</h2>
+  </div>
+
+  <figure>
+    <div class="figwrap">{{COLOURWAYS}}</div>
+    <figcaption><b>Four ways to dye the same drawing.</b> TITANIUM needs no new vendor capability at all — it is the black, grey and white sample already in hand, which is three screens the shop runs every day. NILA is the indigo the hand-drawn sample proves they can dip.</figcaption>
+  </figure>
+
+  <div class="callout warn">
+    <p><strong>RAKING is the better idea and the worse product, and Batch 001 should not carry it.</strong> Black wax on black ground, legible only in raking light, is the most on-brand sentence in § 11 — and it photographs as a black square. Ledger Rev&nbsp;B <span class="chip watch">§ 01</span> flags that the live store currently has <em>no product image on its only product</em>. The one thing Batch 001 cannot afford is a hero object that does not survive a camera. Ship VOID; keep RAKING as the second-year cloth, when there are photographs of something else.</p>
+  </div>
+</section>
+
+<section>
+  <div class="sec-head">
+    <h3>// 05</h3>
+    <h2>The wrap — how the surprise actually works</h2>
+  </div>
+  <div class="prose-stack">
+    <p>The cloth is not in the parcel. The cloth <em>is</em> the parcel's inside: the plate arrives wrapped in it, four folds and a tuck, no tape and no ribbon. The customer undoes it to get at the thing they bought, and is holding it before they work out that it was not packaging.</p>
+    <p>That is Enclosure 000's mechanism exactly — <strong>the secrecy is the asset</strong> — applied to something that costs RM 20 instead of RM 218, ships at 14&nbsp;g instead of 843, and cannot be seized shut by a European winter.</p>
+  </div>
+
+  <figure>
+    <div class="figwrap">{{FOLD}}</div>
+    <figcaption><b>The wrap.</b> A furoshiki fold sized to the 90 × 70 mm plate, finishing at roughly 110 × 95 mm — flat enough for the letter tier, and closed by nothing but its own last corner. <b>The absence of a fastening is the design</b>: there is no moment where the customer looks for scissors.</figcaption>
+  </figure>
+
+  <div class="grid2">
+    <div class="panel">
+      <h3>Why a square and not a sleeve</h3>
+      <p>A wrap gets thrown away. A 350&nbsp;mm square is a pocket square, a book cover, a lens cloth, a thing on a shelf — it has a second life, and every one of those lives is the brand sitting in someone's house not being a security product. That is the whole gift.</p>
+    </div>
+    <div class="panel">
+      <h3>Do not close it with the VOID seal</h3>
+      <p>The obvious move is to seal the last tuck with a seal from SKU E. Don't. Rev&nbsp;B <span class="chip watch">§ 06</span> found transfer already unreliable on <em>titanium</em>; on woven cotton it will not transfer at all. A seal that visibly fails on the wrapper teaches the customer the seal is decorative ten minutes before they use one on the plate.</p>
+    </div>
+  </div>
+</section>
+
+<section id="making">
+  <div class="sec-head">
+    <h3>// 06</h3>
+    <h2>Three routes, and one word to be careful with</h2>
+  </div>
+  <div class="prose-stack">
+    <p>The vendor is <strong>Craft Batik Sdn Bhd</strong> at the Penang Batik Factory, Teluk Bahang — the DIY-booking contact is on file. Two capabilities are demonstrated by the samples in hand: a three-colour block-printed napkin in black, grey and white, and a hand-drawn indigo piece with brush-shaded florals. Both at 14 inches, both off the shelf.</p>
+  </div>
+
+  <div class="routes">
+    <div class="route">
+      <div class="route-id"><span class="code">Tulis</span><span class="sub">canting · hand-drawn</span></div>
+      <div class="route-body">
+        <p>Wax drawn freehand with a copper pen. No tooling, no minimum, and every square is measurably different from every other — which is not a defect to apologise for but the reason the Vault tier exists. Slow: reckon a day's work for a handful of pieces, and brief the shop on <em>tolerance</em>, not perfection, because a hand-drawn kepala that meets itself exactly at the corners is a printed one.</p>
+        <p class="route-num" style="text-align:left"><span class="meta">Is it batik? &nbsp;<strong>Yes.</strong></span></p>
+      </div>
+      <div class="route-num"><span class="price">RM 16–22</span><span class="meta">est. / piece</span><span class="meta">no tooling</span></div>
+    </div>
+
+    <div class="route">
+      <div class="route-id"><span class="code">Cap</span><span class="sub">copper block</span></div>
+      <div class="route-body">
+        <p>Engraved copper strip soldered into a stamp, dipped in wax and struck. Two blocks are needed — one shoot and one medallion — because a 24-triangle bordered layout is not an all-over repeat. Stamp the band along a chalked line and accept ±1&nbsp;mm of drift; the counter-shoot between each pair is drawn wide enough to absorb it, which is why it is there.</p>
+        <p class="route-num" style="text-align:left"><span class="meta">Is it batik? &nbsp;<strong>Yes.</strong></span></p>
+      </div>
+      <div class="route-num"><span class="price">RM 9–13</span><span class="meta">est. / piece</span><span class="meta">+ RM 1,400 tooling</span></div>
+    </div>
+
+    <div class="route">
+      <div class="route-id"><span class="code">Screen</span><span class="sub">pigment print</span></div>
+      <div class="route-body">
+        <p>Cheapest, fastest, dead flat, and no wax touches it at any point. It is a perfectly good way to make a printed napkin and it is what the three-colour sample almost certainly is. Use it if the volume ever demands it — but then the word on the card changes.</p>
+        <p class="route-num" style="text-align:left"><span class="meta">Is it batik? &nbsp;<strong style="color:#FF5B5B">No.</strong></span></p>
+      </div>
+      <div class="route-num"><span class="price">RM 6–9</span><span class="meta">est. / piece</span><span class="meta">+ RM 300 screens</span></div>
+    </div>
+  </div>
+
+  <div class="callout warn">
+    <p><strong>"Batik" is a process word, not a look.</strong> If wax never touched it, it is a batik-<em>motif</em> print and the copy has to say so or say nothing. This is not pedantry and it is not only ethics: the buyer for this product is the same person who screenshots an EMP claim on a passive metal plate, and Malaysia has a national certification regime for exactly this distinction. The brand has spent two claims already. Do not spend the third on a napkin.</p>
+  </div>
+</section>
+
+<section id="cost">
+  <div class="sec-head">
+    <h3>// 07</h3>
+    <h2>Cost — and why Batch 001 is hand-drawn</h2>
+  </div>
+  <div class="prose-stack">
+    <p>Rates are Rev&nbsp;B's, unchanged: USD/MYR 4.09, USD/CNY 6.75. Everything below is an estimate except the two retail tickets, which were photographed. <strong>Trade pricing is the quote to get</strong>, and it is a cheap one to ask for.</p>
+  </div>
+
+  <div class="scroll">
+    <table>
+      <caption>Landed cost per square, by route and quantity · MYR · E = estimate</caption>
+      <thead><tr><th>Route</th><th class="n">Tooling</th><th class="n">@ 40</th><th class="n">@ 100</th><th class="n">@ 500</th><th>Note</th></tr></thead>
+      <tbody>
+        <tr><td class="k">Tulis</td><td class="n">—</td><td class="n">22</td><td class="n">19</td><td class="n">16</td><td>Labour-bound; the curve barely bends</td></tr>
+        <tr><td class="k">Cap</td><td class="n">1,400</td><td class="n">48</td><td class="n">27</td><td class="n">15</td><td>Tooling dominates until the hundreds</td></tr>
+        <tr><td class="k">Screen</td><td class="n">300</td><td class="n">16</td><td class="n">12</td><td class="n">9</td><td>Not batik — see <a href="#making">§ 06</a></td></tr>
+      </tbody>
+      <tfoot><tr><td class="k">Cheapest honest route</td><td class="n">—</td><td class="n">Tulis</td><td class="n">Tulis</td><td class="n">Cap</td><td>The crossover is around 250 pieces</td></tr></tfoot>
+    </table>
+  </div>
+
+  <div class="callout good">
+    <p><strong>The arithmetic and the brand agree, which does not happen often.</strong> At Batch 001 quantities the hand-drawn square is both the cheaper option and the one where no two customers own the same object. Cut the copper only when a second batch is committed — and cut it then, because at 500 the block pays for itself twice over.</p>
+  </div>
+
+  <div class="scroll">
+    <table>
+      <caption>Margin cost of adding one tulis square, at Rev B's ladder</caption>
+      <thead><tr><th>SKU</th><th class="n">Price</th><th class="n">COGS now</th><th class="n">GM now</th><th class="n">GM with cloth</th><th class="n">Cost</th></tr></thead>
+      <tbody>
+        <tr><td class="k">A · The Record</td><td class="n">RM 323</td><td class="n">RM 29</td><td class="n">91.1%</td><td class="n">85.2%</td><td class="n neg">−5.9 pt</td></tr>
+        <tr><td class="k">C · Genesis Kit</td><td class="n">RM 691</td><td class="n">RM 273</td><td class="n">60.5%</td><td class="n">57.7%</td><td class="n">−2.8 pt</td></tr>
+        <tr><td class="k">D · The Vault</td><td class="n">RM 1,427</td><td class="n">RM 454</td><td class="n">68.2%</td><td class="n">66.9%</td><td class="n pos">−1.3 pt</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="prose-stack">
+    <p>And the line that makes this unusual among things you can add to a parcel: <strong>a 350&nbsp;mm cotton square weighs about 14&nbsp;g.</strong> Against Rev&nbsp;B's freight tiers it is free — it does not move the Kit off the 615&nbsp;g band, and it is nowhere near the 1&nbsp;kg cliff that settled the plate thickness. Almost nothing else you could put in the box is weightless.</p>
+  </div>
+</section>
+
+<section id="skus">
+  <div class="sec-head">
+    <h3>// 08</h3>
+    <h2>Which SKUs carry it — § 11, re-derived</h2>
+  </div>
+  <div class="prose-stack">
+    <p>Rev&nbsp;B kept batik off the entry SKU because it cost 147% of that SKU's bill. It now costs 5.9 points of margin on a product running at 91%. <strong>That objection is gone and the answer is still no</strong>, for a reason § 11 could not reach while the cost was doing the work.</p>
+    <p>A surprise that ships on every order is a feature. Features get written into listings, then into reviews, then into the third-party comparison table — and Enclosure 000 already worked out what happens next: <em>the secrecy is a one-time, one-wave asset; it survives exactly until the first unboxing video, and then it converts into the thing that makes the video worth posting.</em> Putting it on the $79 SKU spends that conversion on the customers least likely to film anything.</p>
+  </div>
+
+  <div class="scroll">
+    <table>
+      <caption>Allocation</caption>
+      <thead><tr><th>SKU</th><th>Carries</th><th>Route</th><th>Why</th></tr></thead>
+      <tbody>
+        <tr><td class="k">A · The Record</td><td><span class="chip kill">No</span></td><td>—</td><td>Unmarked anti-tarnish sleeve, as Rev B has it. An unmarked sleeve is what a thing that does not want to be noticed arrives in.</td></tr>
+        <tr><td class="k">B · The Instrument</td><td><span class="chip kill">No</span></td><td>—</td><td>Almost never bought alone. Wrapping punches in cloth is a wrap around a wrap.</td></tr>
+        <tr><td class="k">C · Genesis Kit</td><td><span class="chip keep">Yes</span></td><td>Tulis · VOID</td><td>The hero, the reviewed SKU, the one the photographs come from.</td></tr>
+        <tr><td class="k">D · The Vault</td><td><span class="chip keep">Yes</span></td><td>Tulis · NILA</td><td>A different colourway, so the two SKUs are visibly not the same parcel.</td></tr>
+        <tr><td class="k">E · Seal Refill</td><td><span class="chip change">Prototype</span></td><td>Tulis · varies</td><td>See below — this is the one worth arguing about.</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="callout">
+    <p><strong>The seal refill is the interesting case.</strong> Rev&nbsp;B <span class="chip watch">§ 05</span> is blunt that SKU E is not a business line — its value is that it is <em>the only reason you will ever have to email a customer twelve months after their one and only order.</em> A flat mailer of ten seals is not a reason to open an envelope. A flat mailer of ten seals <em>and a cloth in this year's colourway</em> is. It costs RM 16 against a $25 ticket, it ships at letter rate regardless, and it turns a consumable into something with a series number. Prototype it against Batch 001's repeat customers before committing.</p>
+  </div>
+</section>
+
+<section>
+  <div class="sec-head">
+    <h3>// 09</h3>
+    <h2>The rules, and the two tests before it touches titanium</h2>
+  </div>
+
+  <ul class="plain">
+    <li><strong>Never in the listing.</strong> Not in What's Included, not in the collection copy, not in an alt tag, not in a meta description. Same discipline as the enclosure, for the same reason and with less to lose.</li>
+    <li><strong>Never in the same room as the block.</strong> Enclosure 001's rule for the steel card, extended. One line in onboarding, no explanation.</li>
+    <li><strong>The vendor brief stays boring.</strong> <em>Napkin batik 14 × 14, corak tempahan</em> — custom pattern. No brand name in the artwork files, no NoughtVault in a filename, nothing in the brief that says what the square is for. The concealment has to hold at the supply-chain layer first.</li>
+    <li><strong>The mark is struck by the shop, not designed by them.</strong> Supply the medallion as line art at final size. Batik shops improvise beautifully and this is the one element that must not be improvised.</li>
+  </ul>
+
+  <div class="grid2">
+    <div class="panel">
+      <h3>Test 01 — crocking</h3>
+      <p>New batik gives up dye. A square that transfers indigo onto a plate the customer is about to stamp, seal and photograph is a defect that will be described as a stain. Specify a wet and dry rub test to <strong>grade 4 minimum</strong>, and a pre-wash and cure before packing. Ask the shop what they already do; most do something.</p>
+    </div>
+    <div class="panel">
+      <h3>Test 02 — wax residue</h3>
+      <p>Wax is boiled out at the end of the process, never perfectly. Residue on cotton is invisible and harmless; residue on titanium under a pressure-sensitive seal is an adhesion failure that will be blamed on the seal. Check a finished square against a plate at 40&nbsp;°C for a week before Batch 001 packs.</p>
+    </div>
+  </div>
+
+  <div class="prose-stack">
+    <p>One more, which belongs in onboarding rather than in production: <strong>cotton holds moisture and titanium does not care, but the space between them does.</strong> The wrap is for transit, for the drawer and for wearing. It is not long-term storage in a coastal climate, and it is emphatically not where the plate lives once the customer owns Enclosure 001 — that is what the felted pocket is for.</p>
+  </div>
+</section>
+
+<section>
+  <div class="sec-head">
+    <h3>// 10</h3>
+    <h2>What ships with it</h2>
+  </div>
+  <div class="prose-stack">
+    <p>Nothing printed goes inside the wrap — that rule is inherited whole from Enclosure 000, where the opening sequence deliberately never travels with the box. The cloth is explained once, afterwards, in the same terminal type as the gate, and only to somebody who already has it in their hands.</p>
+  </div>
+
+  <div class="term"><span class="a">NOUGHT</span><span class="w">VAULT</span>  // TEXTILE 000
+
+<span class="w">&gt; THE CLOTH IS YOURS. IT WAS NEVER PACKAGING.</span>
+
+  KEPALA 24 · HAND-DRAWN IN TELUK BAHANG, PENANG
+  TWENTY-FOUR PUCUK REBUNG. COUNT THEM ONCE.
+  IT RECORDS NOTHING. THAT IS THE POINT.
+
+<span class="a">&gt; TURN ONE UPSIDE DOWN AND YOU HAVE THE REST OF IT.</span>
+<span class="a">&gt; DO NOT KEEP IT WHERE YOU KEEP THE BLOCK.</span></div>
+
+  <div class="callout">
+    <p><strong>Five lines, and the fourth one does all the work.</strong> It does not explain the keyhole. The customer either turns a triangle over in their head or they don't, and the ones who do have just been given something no listing could have sold them — which is the same trade Enclosure 000 makes with its three moves, at a twentieth of the cost.</p>
+  </div>
+</section>
+
+<section>
+  <div class="sec-head">
+    <h3>// 11</h3>
+    <h2>Six decisions</h2>
+  </div>
+
+  <div class="decide"><span class="box"></span><p><span class="q">Tulis or cap for Batch 001?</span><strong>Tulis.</strong> At 40–100 pieces the copper does not amortise, so the hand-drawn square is cheaper <em>and</em> the one where no two customers own the same object. Cut blocks when a second batch is committed, not before.</p></div>
+
+  <div class="decide"><span class="box"></span><p><span class="q">Which colourway launches?</span><strong>VOID.</strong> RAKING is the better sentence and the worse product — it photographs as a black square, and the store currently has no product photograph at all. Hold it for year two.</p></div>
+
+  <div class="decide"><span class="box"></span><p><span class="q">Does the medallion ship?</span><strong>Yes, on VOID and NILA; never on RAKING.</strong> Supply it as line art at final size and do not let the shop redraw it.</p></div>
+
+  <div class="decide"><span class="box"></span><p><span class="q">Twenty-four, or don't count?</span><strong>Count.</strong> It costs one instruction to the shop, it is never mentioned in a listing, and it is the detail that makes the object feel designed rather than sourced. The matching rule is that the copy never implies the cloth stores anything.</p></div>
+
+  <div class="decide"><span class="box"></span><p><span class="q">Does the entry SKU get one?</span><strong>No</strong> — but note that the reason has changed from money to secrecy, and write it down that way, because the next person to look at this will find RM 20 on a RM 323 sale and reopen it.</p></div>
+
+  <div class="decide"><span class="box"></span><p><span class="q">Cloth with the seal refill?</span><strong>Prototype it.</strong> It is the cheapest available answer to the one structural weakness in the catalogue — that there is no reason to contact a customer again — and a colourway with a year on it makes a consumable collectable.</p></div>
+</section>
+
+<footer>
+  <p class="signoff">NOUGHTVAULT // TEXTILE 000 · KEPALA 24 · TWENTY-FOUR SHOOTS, ONE OF THEM UPSIDE DOWN</p>
+  <p style="font-size:14px;color:var(--titanium);max-width:64ch">Retail prices photographed at Craft Batik Sdn Bhd, Penang Batik Factory, Teluk Bahang, and carried as observed. All per-piece and tooling figures are estimates pending trade quotation. FX and the SKU ladder are Ledger 000 Rev B's, dated 7–11 August 2026. Motif research from the common regional vocabulary — pucuk rebung, tumpal, kepala kain, cecek, canting, tulis, cap — and should be checked with the shop, who will know it better than this document does.</p>
+</footer>
+
+</div>
