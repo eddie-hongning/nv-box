@@ -1,1 +1,4 @@
 dist/*.zip
+__pycache__/
+*.pyc
+tools/textile-000-batik.html
