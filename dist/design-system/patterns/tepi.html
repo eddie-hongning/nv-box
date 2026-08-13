@@ -1,0 +1,53 @@
+<!-- @dsCard group="Patterns" name="Tepi" subtitle="Ruled border, 26 cecek a side" -->
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Tepi</title>
+<style>
+:root{
+  --void:#000; --panel:#070707; --rule:#1B1B1B; --rule-hi:#2C2C2C;
+  --titanium:#8A8C8E; --white:#fff; --prose:#C4BDB2; --resist:#EDE6D6;
+  --mono: ui-monospace,"Cascadia Mono",Consolas,"SFMono-Regular",Menlo,monospace;
+  --serif: "Iowan Old Style","Palatino Linotype",Palatino,"Book Antiqua",Georgia,serif;
+}
+*{box-sizing:border-box}
+html{background:var(--void);color-scheme:dark}
+body{margin:0;background:var(--void);color:var(--prose);font-family:var(--serif);
+     font-size:16px;line-height:1.7;-webkit-font-smoothing:antialiased}
+.wrap{padding:40px 44px 52px;display:flex;flex-direction:column;gap:30px}
+.head{display:flex;flex-direction:column;gap:8px;border-bottom:1px solid var(--rule);
+      padding-bottom:20px}
+.eyebrow{font-family:var(--mono);font-size:10.5px;letter-spacing:.38em;
+         text-transform:uppercase;color:var(--titanium)}
+.eyebrow b{color:var(--white);font-weight:400}
+h1{font-family:var(--mono);font-weight:400;font-size:19px;letter-spacing:.16em;
+   text-transform:uppercase;color:var(--white);margin:0;text-wrap:balance}
+.note{max-width:70ch;color:var(--titanium);font-size:15px;margin:0}
+.row{display:flex;flex-wrap:wrap;gap:34px;align-items:flex-end}
+.row.top{align-items:flex-start}
+.sw{width:150px}
+.cell{display:flex;flex-direction:column;gap:10px}
+.cap{font-family:var(--mono);font-size:10px;letter-spacing:.16em;
+     text-transform:uppercase;color:var(--titanium)}
+.cap b{color:var(--resist);font-weight:400;display:block}
+svg{display:block;overflow:visible}
+.scroll{overflow-x:auto}
+.sw{display:flex;flex-direction:column;gap:9px}
+.chip{width:150px;height:76px;border:1px solid var(--rule-hi)}
+.hex{font-family:var(--mono);font-size:11px;letter-spacing:.1em;color:var(--white)}
+.tok{font-family:var(--mono);font-size:10px;letter-spacing:.14em;color:var(--titanium)}
+.desc{font-size:13.5px;color:var(--titanium);max-width:22ch;line-height:1.5}
+.rule{border:0;border-top:1px solid var(--rule);margin:0}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="head">
+    <div class="eyebrow">NOUGHT<b>VAULT</b> &nbsp;//&nbsp; PATTERN · TEPI</div>
+    <h1>The tepi</h1>
+  </div>
+  <p class="note">The 8 mm ruled border, inside a 14 mm plain hem. It carries 26 cecek a side — one per punch in the DC53 alphabet. Like the 24 shoots, it is ornament that happens to count: it costs one instruction to the shop, it is never mentioned in a listing, and it is the detail that makes the object read as designed rather than sourced.</p>
+  <div class="scroll"><svg viewBox="0 0 608.0 58.0" width="608" height="58" role="img"><g transform="translate(4,4)"><rect x="0" y="0" width="600.0" height="48.0" fill="none" stroke="#EDE6D6" stroke-width="1.7"/><rect x="16.0" y="16.0" width="568.0" height="16.0" fill="none" stroke="#EDE6D6" stroke-width="1.7"/><circle cx="26.92" cy="8.0" r="1.7" fill="#EDE6D6"/><circle cx="48.77" cy="8.0" r="1.7" fill="#EDE6D6"/><circle cx="70.62" cy="8.0" r="1.7" fill="#EDE6D6"/><circle cx="92.46" cy="8.0" r="1.7" fill="#EDE6D6"/><circle cx="114.31" cy="8.0" r="1.7" fill="#EDE6D6"/><circle cx="136.15" cy="8.0" r="1.7" fill="#EDE6D6"/><circle cx="158.0" cy="8.0" r="1.7" fill="#EDE6D6"/><circle cx="179.85" cy="8.0" r="1.7" fill="#EDE6D6"/><circle cx="201.69" cy="8.0" r="1.7" fill="#EDE6D6"/><circle cx="223.54" cy="8.0" r="1.7" fill="#EDE6D6"/><circle cx="245.38" cy="8.0" r="1.7" fill="#EDE6D6"/><circle cx="267.23" cy="8.0" r="1.7" fill="#EDE6D6"/><circle cx="289.08" cy="8.0" r="1.7" fill="#EDE6D6"/><circle cx="310.92" cy="8.0" r="1.7" fill="#EDE6D6"/><circle cx="332.77" cy="8.0" r="1.7" fill="#EDE6D6"/><circle cx="354.62" cy="8.0" r="1.7" fill="#EDE6D6"/><circle cx="376.46" cy="8.0" r="1.7" fill="#EDE6D6"/><circle cx="398.31" cy="8.0" r="1.7" fill="#EDE6D6"/><circle cx="420.15" cy="8.0" r="1.7" fill="#EDE6D6"/><circle cx="442.0" cy="8.0" r="1.7" fill="#EDE6D6"/><circle cx="463.85" cy="8.0" r="1.7" fill="#EDE6D6"/><circle cx="485.69" cy="8.0" r="1.7" fill="#EDE6D6"/><circle cx="507.54" cy="8.0" r="1.7" fill="#EDE6D6"/><circle cx="529.38" cy="8.0" r="1.7" fill="#EDE6D6"/><circle cx="551.23" cy="8.0" r="1.7" fill="#EDE6D6"/><circle cx="573.08" cy="8.0" r="1.7" fill="#EDE6D6"/></g></svg></div>
+  <div class="cap"><b>26 cecek a side</b>shown at 300 mm of a 306 mm run</div>
+</div>
+</body></html>

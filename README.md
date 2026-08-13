@@ -15,19 +15,34 @@ Ledger 000 Rev B `§ 11`, which is where batik was first costed.
 
 ## Regenerating the batik artwork
 
-`textile-000-batik.html` is generated, and the drawings in it are parametric rather
-than hand-authored — the nested resist outlines and the noughts nested inside them
-are both solved from the same triangle-inset routine, so a motif cannot overflow its
-own edge when a dimension changes. Edit the prose in the template or the geometry in
-the script, then rebuild:
+The batik drawings are parametric rather than hand-authored. `tools/batik.py` holds
+the geometry — the nested resist outlines and the noughts nested inside them are both
+solved from the same triangle-inset routine, so a motif cannot overflow its own edge
+when a dimension changes. Two generators consume it:
 
 ```sh
-cd tools && python3 textile-000-build.py && mv textile-000-batik.html ..
+cd tools
+python3 textile-000-build.py && mv textile-000-batik.html ..   # the document
+python3 design-export.py                                       # dist/design-system/**
 ```
 
-Every figure is authored at two SVG units per millimetre, so the drawings are the
-specification: changing `SHOOT`, `N` or `KEPALA` at the top of the script redraws the
-print correctly at its new proportions.
+Every drawing is authored at two SVG units per millimetre, so the figures are the
+specification: changing `SHOOT`, `N` or `KEPALA` in `batik.py` redraws both the
+document and the design system correctly at the new proportions. Edit prose in
+`tools/textile-000-batik.template.html`, never in the generated HTML.
+
+## The design system
+
+`dist/design-system/` is the Claude Design bundle — eleven standalone component
+previews across Foundations, Brand, Motifs, Patterns, Prints and Packaging, each
+carrying a first-line `@dsCard` marker so the Design System pane indexes it without
+explicit asset registration. It is generated from the same `batik.py`, so the system
+and the specification cannot drift apart.
+
+Pushing it needs design-system authorization, which `/design-login` only grants from
+an interactive terminal — not from Claude Code on the web. Either run the sync from a
+local terminal, or use Claude Design's **Send to Claude Code Web** to seed the project
+first. `dist/noughtvault-batik-design-system.zip` is the same bundle, packaged.
 
 ## Handling
 

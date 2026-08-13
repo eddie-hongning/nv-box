@@ -1,0 +1,60 @@
+<!-- @dsCard group="Foundations" name="Colour" subtitle="Void ground, undyed accent, 7 tokens" -->
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Colour</title>
+<style>
+:root{
+  --void:#000; --panel:#070707; --rule:#1B1B1B; --rule-hi:#2C2C2C;
+  --titanium:#8A8C8E; --white:#fff; --prose:#C4BDB2; --resist:#EDE6D6;
+  --mono: ui-monospace,"Cascadia Mono",Consolas,"SFMono-Regular",Menlo,monospace;
+  --serif: "Iowan Old Style","Palatino Linotype",Palatino,"Book Antiqua",Georgia,serif;
+}
+*{box-sizing:border-box}
+html{background:var(--void);color-scheme:dark}
+body{margin:0;background:var(--void);color:var(--prose);font-family:var(--serif);
+     font-size:16px;line-height:1.7;-webkit-font-smoothing:antialiased}
+.wrap{padding:40px 44px 52px;display:flex;flex-direction:column;gap:30px}
+.head{display:flex;flex-direction:column;gap:8px;border-bottom:1px solid var(--rule);
+      padding-bottom:20px}
+.eyebrow{font-family:var(--mono);font-size:10.5px;letter-spacing:.38em;
+         text-transform:uppercase;color:var(--titanium)}
+.eyebrow b{color:var(--white);font-weight:400}
+h1{font-family:var(--mono);font-weight:400;font-size:19px;letter-spacing:.16em;
+   text-transform:uppercase;color:var(--white);margin:0;text-wrap:balance}
+.note{max-width:70ch;color:var(--titanium);font-size:15px;margin:0}
+.row{display:flex;flex-wrap:wrap;gap:34px;align-items:flex-end}
+.row.top{align-items:flex-start}
+.sw{width:150px}
+.cell{display:flex;flex-direction:column;gap:10px}
+.cap{font-family:var(--mono);font-size:10px;letter-spacing:.16em;
+     text-transform:uppercase;color:var(--titanium)}
+.cap b{color:var(--resist);font-weight:400;display:block}
+svg{display:block;overflow:visible}
+.scroll{overflow-x:auto}
+.sw{display:flex;flex-direction:column;gap:9px}
+.chip{width:150px;height:76px;border:1px solid var(--rule-hi)}
+.hex{font-family:var(--mono);font-size:11px;letter-spacing:.1em;color:var(--white)}
+.tok{font-family:var(--mono);font-size:10px;letter-spacing:.14em;color:var(--titanium)}
+.desc{font-size:13.5px;color:var(--titanium);max-width:22ch;line-height:1.5}
+.rule{border:0;border-top:1px solid var(--rule);margin:0}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="head">
+    <div class="eyebrow">NOUGHT<b>VAULT</b> &nbsp;//&nbsp; FOUNDATIONS · COLOUR</div>
+    <h1>Colour</h1>
+  </div>
+  <p class="note">The house is void-black and single-theme by commitment, in every document. What changes per document is the accent, and for the textile it is raw undyed cotton — because in a resist process the accent is the absence of dye. Wax is laid so the dye cannot reach what is underneath, and what you see is the negative of what was protected. Semantic colours are kept strictly separate from the accent.</p>
+  <div class="row top">
+    <div class="sw"><div class="chip" style="background:#000000;border-color:#2C2C2C"></div><div class="hex">#000000</div><div class="tok">--void</div><div class="desc">the ground. Every document, every colourway.</div></div>
+    <div class="sw"><div class="chip" style="background:#EDE6D6"></div><div class="hex">#EDE6D6</div><div class="tok">--resist</div><div class="desc">raw undyed cotton — where the wax was. The accent.</div></div>
+    <div class="sw"><div class="chip" style="background:#2F5B78"></div><div class="hex">#2F5B78</div><div class="tok">--nila</div><div class="desc">the indigo dip. Vault tier only.</div></div>
+    <div class="sw"><div class="chip" style="background:#8A8C8E"></div><div class="hex">#8A8C8E</div><div class="tok">--titanium</div><div class="desc">labels, dimensions, secondary prose.</div></div>
+    <div class="sw"><div class="chip" style="background:#C4BDB2"></div><div class="hex">#C4BDB2</div><div class="tok">--prose</div><div class="desc">running text. Warm, against the cold accent.</div></div>
+    <div class="sw"><div class="chip" style="background:#1B1B1B"></div><div class="hex">#1B1B1B</div><div class="tok">--rule</div><div class="desc">hairlines and section divisions.</div></div>
+    <div class="sw"><div class="chip" style="background:#070707;border-color:#2C2C2C"></div><div class="hex">#070707</div><div class="tok">--panel</div><div class="desc">raised surfaces, one step off the void.</div></div>
+  </div>
+</div>
+</body></html>
